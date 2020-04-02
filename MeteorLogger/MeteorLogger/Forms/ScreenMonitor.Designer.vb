@@ -32,6 +32,8 @@ Partial Class ScreenMonitor
         Me.Render = New System.Windows.Forms.PictureBox()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.WaitForConnectionTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.coordinated = New System.Windows.Forms.Label()
+        Me.remotecontrol = New System.Windows.Forms.CheckBox()
         CType(Me.Render, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -127,11 +129,34 @@ Partial Class ScreenMonitor
         Me.WaitForConnectionTimer.Enabled = True
         Me.WaitForConnectionTimer.Interval = 500
         '
+        'coordinated
+        '
+        Me.coordinated.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.coordinated.AutoSize = True
+        Me.coordinated.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.coordinated.Location = New System.Drawing.Point(549, 358)
+        Me.coordinated.Name = "coordinated"
+        Me.coordinated.Size = New System.Drawing.Size(72, 15)
+        Me.coordinated.TabIndex = 8
+        Me.coordinated.Text = "coordinated"
+        '
+        'remotecontrol
+        '
+        Me.remotecontrol.AutoSize = True
+        Me.remotecontrol.Location = New System.Drawing.Point(357, 334)
+        Me.remotecontrol.Name = "remotecontrol"
+        Me.remotecontrol.Size = New System.Drawing.Size(135, 17)
+        Me.remotecontrol.TabIndex = 9
+        Me.remotecontrol.Text = "Enable Remote Control"
+        Me.remotecontrol.UseVisualStyleBackColor = True
+        '
         'ScreenMonitor
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(652, 372)
+        Me.Controls.Add(Me.remotecontrol)
+        Me.Controls.Add(Me.coordinated)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Render)
         Me.Controls.Add(Me.StopButton)
@@ -157,4 +182,6 @@ Partial Class ScreenMonitor
     Friend WithEvents Render As PictureBox
     Friend WithEvents Button3 As Button
     Friend WithEvents WaitForConnectionTimer As Timer
+    Friend WithEvents coordinated As Label
+    Friend WithEvents remotecontrol As CheckBox
 End Class

