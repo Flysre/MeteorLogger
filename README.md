@@ -15,9 +15,9 @@ Actual :
 - Remote Uploader
 - Remote Execute
 - Messagebox
+- Remote mouse & keyboard control [DONE 02/04/2020]
 
 Incoming :
-- Remote mouse & keyboard control
 - Keylogger
 - Remote Shell (with console response)
 - Open URL
