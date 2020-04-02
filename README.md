@@ -15,7 +15,7 @@ Actual :
 - Remote Uploader
 - Remote Execute
 - Messagebox
-- Remote mouse & keyboard control [DONE 02/04/2020]
+- Remote mouse control
 
 Incoming :
 - Keylogger
@@ -30,6 +30,19 @@ Incoming :
 - Persistence
 - Auto-close process
 - Anti taskmgr/processhacker
+- Change Wallpaper
+- System logs
+- Advanced victim statistics
+- Open/close cd (using MCI)
+- Hide taskbar
+- Invert mouse
+- Client blacklist
+- Lock victim's computer
+- Background mp3
+- Background voice (SAPI)
+- Smart file stealer
+- Geolocalisation
+- File browser
 
 <h2>Usage</h2>
 
