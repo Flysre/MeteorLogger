@@ -22,11 +22,6 @@ stub
   resource lookups using this strongly typed resource class.
 </summary>
 </member>
-<member name="P:stub.My.Resources.Resources.donald">
-<summary>
-  Looks up a localized resource of type System.Drawing.Bitmap.
-</summary>
-</member>
 <member name="T:stub.MainForm">
  <summary>
  TODO: Add mutex

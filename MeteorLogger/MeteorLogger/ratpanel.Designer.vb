@@ -37,6 +37,8 @@ Partial Class RatPanel
         Me.softwarename = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.antivirus = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ConfigTab = New System.Windows.Forms.TabPage()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.CheckBox13 = New System.Windows.Forms.CheckBox()
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
@@ -85,21 +87,36 @@ Partial Class RatPanel
         Me.RemoteShellToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FunToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MessageboxToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.BSODToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.OpenURLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.everyoneCMS = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ComputersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RebootAllComputersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ShutdownAllComputersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ShutdownAllRATSToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RebootAllRATSToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UninstallAllClientsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolsToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MassRemoteExecuteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MassRemoteCMDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BSODCrashToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OpenURLToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MassOpenURLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MassBSODToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MassDDoSAttackBOTNETToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MassMessageBoxToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ChangeSettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MassSettinsChangeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel.SuspendLayout()
         Me.ClientsTab.SuspendLayout()
         CType(Me.connectedClientsView, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ConfigTab.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.BuilderTab.SuspendLayout()
         Me.optionsCMS.SuspendLayout()
-        Me.GroupBox5.SuspendLayout()
+        Me.everyoneCMS.SuspendLayout()
         Me.SuspendLayout()
         '
         'ClientListManager
@@ -225,6 +242,26 @@ Partial Class RatPanel
         Me.ConfigTab.TabIndex = 2
         Me.ConfigTab.Text = "Config"
         Me.ConfigTab.UseVisualStyleBackColor = True
+        '
+        'GroupBox5
+        '
+        Me.GroupBox5.Controls.Add(Me.TextBox2)
+        Me.GroupBox5.Location = New System.Drawing.Point(8, 87)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(203, 65)
+        Me.GroupBox5.TabIndex = 10
+        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.Text = "Backup Server"
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Enabled = False
+        Me.TextBox2.Location = New System.Drawing.Point(4, 28)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(187, 21)
+        Me.TextBox2.TabIndex = 7
+        Me.TextBox2.Text = "http://backupserver/RAT/"
+        Me.TextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'GroupBox4
         '
@@ -553,16 +590,16 @@ Partial Class RatPanel
         '
         'optionsCMS
         '
-        Me.optionsCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ClientToolStripMenuItem, Me.SurveillanceToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.FunToolStripMenuItem})
+        Me.optionsCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ClientToolStripMenuItem, Me.SurveillanceToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.FunToolStripMenuItem, Me.ChangeSettingsToolStripMenuItem})
         Me.optionsCMS.Name = "ContextMenuStrip1"
-        Me.optionsCMS.Size = New System.Drawing.Size(138, 92)
+        Me.optionsCMS.Size = New System.Drawing.Size(161, 114)
         '
         'ClientToolStripMenuItem
         '
-        Me.ClientToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShutdownToolStripMenuItem, Me.RebootToolStripMenuItem, Me.RATShutdownToolStripMenuItem, Me.RATRebootToolStripMenuItem, Me.RATUninstallToolStripMenuItem})
+        Me.ClientToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShutdownToolStripMenuItem, Me.RebootToolStripMenuItem, Me.RATShutdownToolStripMenuItem, Me.RATRebootToolStripMenuItem, Me.RATUninstallToolStripMenuItem, Me.BSODCrashToolStripMenuItem})
         Me.ClientToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.Sans_titre
         Me.ClientToolStripMenuItem.Name = "ClientToolStripMenuItem"
-        Me.ClientToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.ClientToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.ClientToolStripMenuItem.Text = "System"
         '
         'ShutdownToolStripMenuItem
@@ -605,102 +642,180 @@ Partial Class RatPanel
         Me.SurveillanceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ScreenMonitorToolStripMenuItem, Me.CameraMonitorToolStripMenuItem, Me.KeyBoardLogToolStripMenuItem})
         Me.SurveillanceToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.surveillancetab
         Me.SurveillanceToolStripMenuItem.Name = "SurveillanceToolStripMenuItem"
-        Me.SurveillanceToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.SurveillanceToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.SurveillanceToolStripMenuItem.Text = "Surveillance"
         '
         'ScreenMonitorToolStripMenuItem
         '
         Me.ScreenMonitorToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.screen_monitor2
         Me.ScreenMonitorToolStripMenuItem.Name = "ScreenMonitorToolStripMenuItem"
-        Me.ScreenMonitorToolStripMenuItem.Size = New System.Drawing.Size(161, 22)
+        Me.ScreenMonitorToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ScreenMonitorToolStripMenuItem.Text = "Screen Monitor"
         '
         'CameraMonitorToolStripMenuItem
         '
         Me.CameraMonitorToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.surveillancetab
         Me.CameraMonitorToolStripMenuItem.Name = "CameraMonitorToolStripMenuItem"
-        Me.CameraMonitorToolStripMenuItem.Size = New System.Drawing.Size(161, 22)
+        Me.CameraMonitorToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.CameraMonitorToolStripMenuItem.Text = "Camera Monitor"
         '
         'KeyBoardLogToolStripMenuItem
         '
         Me.KeyBoardLogToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.keyboard
         Me.KeyBoardLogToolStripMenuItem.Name = "KeyBoardLogToolStripMenuItem"
-        Me.KeyBoardLogToolStripMenuItem.Size = New System.Drawing.Size(161, 22)
+        Me.KeyBoardLogToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.KeyBoardLogToolStripMenuItem.Text = "KeyBoard Logs"
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RemoteFileExecuteToolStripMenuItem, Me.LaunchChatToolStripMenuItem, Me.RemoteShellToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RemoteFileExecuteToolStripMenuItem, Me.LaunchChatToolStripMenuItem, Me.RemoteShellToolStripMenuItem, Me.OpenURLToolStripMenuItem1})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.ToolsToolStripMenuItem.Text = "Tools"
         '
         'RemoteFileExecuteToolStripMenuItem
         '
         Me.RemoteFileExecuteToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.remote_upload
         Me.RemoteFileExecuteToolStripMenuItem.Name = "RemoteFileExecuteToolStripMenuItem"
-        Me.RemoteFileExecuteToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
+        Me.RemoteFileExecuteToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.RemoteFileExecuteToolStripMenuItem.Text = "Remote Execute"
         '
         'LaunchChatToolStripMenuItem
         '
         Me.LaunchChatToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.remote_chat
         Me.LaunchChatToolStripMenuItem.Name = "LaunchChatToolStripMenuItem"
-        Me.LaunchChatToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
+        Me.LaunchChatToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.LaunchChatToolStripMenuItem.Text = "Remote Chat"
         '
         'RemoteShellToolStripMenuItem
         '
         Me.RemoteShellToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.remoteshell
         Me.RemoteShellToolStripMenuItem.Name = "RemoteShellToolStripMenuItem"
-        Me.RemoteShellToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
+        Me.RemoteShellToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.RemoteShellToolStripMenuItem.Text = "Remote Shell"
         '
         'FunToolStripMenuItem
         '
-        Me.FunToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MessageboxToolStripMenuItem, Me.BSODToolStripMenuItem, Me.OpenURLToolStripMenuItem})
+        Me.FunToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MessageboxToolStripMenuItem})
         Me.FunToolStripMenuItem.Name = "FunToolStripMenuItem"
-        Me.FunToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.FunToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.FunToolStripMenuItem.Text = "Fun"
         '
         'MessageboxToolStripMenuItem
         '
         Me.MessageboxToolStripMenuItem.Name = "MessageboxToolStripMenuItem"
-        Me.MessageboxToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
+        Me.MessageboxToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.MessageboxToolStripMenuItem.Text = "Messagebox"
         '
-        'BSODToolStripMenuItem
+        'everyoneCMS
         '
-        Me.BSODToolStripMenuItem.Name = "BSODToolStripMenuItem"
-        Me.BSODToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
-        Me.BSODToolStripMenuItem.Text = "BSOD"
+        Me.everyoneCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ComputersToolStripMenuItem, Me.ToolsToolStripMenuItem1, Me.MassSettinsChangeToolStripMenuItem})
+        Me.everyoneCMS.Name = "everyoneCMS"
+        Me.everyoneCMS.Size = New System.Drawing.Size(184, 70)
         '
-        'OpenURLToolStripMenuItem
+        'ComputersToolStripMenuItem
         '
-        Me.OpenURLToolStripMenuItem.Name = "OpenURLToolStripMenuItem"
-        Me.OpenURLToolStripMenuItem.Size = New System.Drawing.Size(139, 22)
-        Me.OpenURLToolStripMenuItem.Text = "Open URL"
+        Me.ComputersToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RebootAllComputersToolStripMenuItem, Me.ShutdownAllComputersToolStripMenuItem, Me.ShutdownAllRATSToolStripMenuItem, Me.RebootAllRATSToolStripMenuItem, Me.UninstallAllClientsToolStripMenuItem, Me.MassBSODToolStripMenuItem})
+        Me.ComputersToolStripMenuItem.Name = "ComputersToolStripMenuItem"
+        Me.ComputersToolStripMenuItem.Size = New System.Drawing.Size(183, 22)
+        Me.ComputersToolStripMenuItem.Text = "Computers"
         '
-        'GroupBox5
+        'RebootAllComputersToolStripMenuItem
         '
-        Me.GroupBox5.Controls.Add(Me.TextBox2)
-        Me.GroupBox5.Location = New System.Drawing.Point(8, 87)
-        Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.Size = New System.Drawing.Size(203, 65)
-        Me.GroupBox5.TabIndex = 10
-        Me.GroupBox5.TabStop = False
-        Me.GroupBox5.Text = "Backup Server"
+        Me.RebootAllComputersToolStripMenuItem.Name = "RebootAllComputersToolStripMenuItem"
+        Me.RebootAllComputersToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.RebootAllComputersToolStripMenuItem.Text = "Reboot All Systems"
         '
-        'TextBox2
+        'ShutdownAllComputersToolStripMenuItem
         '
-        Me.TextBox2.Enabled = False
-        Me.TextBox2.Location = New System.Drawing.Point(4, 28)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(187, 21)
-        Me.TextBox2.TabIndex = 7
-        Me.TextBox2.Text = "http://backupserver/RAT/"
-        Me.TextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.ShutdownAllComputersToolStripMenuItem.Name = "ShutdownAllComputersToolStripMenuItem"
+        Me.ShutdownAllComputersToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.ShutdownAllComputersToolStripMenuItem.Text = "Shutdown All Systems"
+        '
+        'ShutdownAllRATSToolStripMenuItem
+        '
+        Me.ShutdownAllRATSToolStripMenuItem.Name = "ShutdownAllRATSToolStripMenuItem"
+        Me.ShutdownAllRATSToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.ShutdownAllRATSToolStripMenuItem.Text = "Shutdown All RATS"
+        '
+        'RebootAllRATSToolStripMenuItem
+        '
+        Me.RebootAllRATSToolStripMenuItem.Name = "RebootAllRATSToolStripMenuItem"
+        Me.RebootAllRATSToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.RebootAllRATSToolStripMenuItem.Text = "Reboot All RATS"
+        '
+        'UninstallAllClientsToolStripMenuItem
+        '
+        Me.UninstallAllClientsToolStripMenuItem.Name = "UninstallAllClientsToolStripMenuItem"
+        Me.UninstallAllClientsToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.UninstallAllClientsToolStripMenuItem.Text = "Uninstall All RATS"
+        '
+        'ToolsToolStripMenuItem1
+        '
+        Me.ToolsToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MassRemoteExecuteToolStripMenuItem, Me.MassRemoteCMDToolStripMenuItem, Me.MassOpenURLToolStripMenuItem, Me.MassDDoSAttackBOTNETToolStripMenuItem, Me.MassMessageBoxToolStripMenuItem})
+        Me.ToolsToolStripMenuItem1.Name = "ToolsToolStripMenuItem1"
+        Me.ToolsToolStripMenuItem1.Size = New System.Drawing.Size(183, 22)
+        Me.ToolsToolStripMenuItem1.Text = "Tools"
+        '
+        'MassRemoteExecuteToolStripMenuItem
+        '
+        Me.MassRemoteExecuteToolStripMenuItem.Name = "MassRemoteExecuteToolStripMenuItem"
+        Me.MassRemoteExecuteToolStripMenuItem.Size = New System.Drawing.Size(226, 22)
+        Me.MassRemoteExecuteToolStripMenuItem.Text = "Mass Remote Execute"
+        '
+        'MassRemoteCMDToolStripMenuItem
+        '
+        Me.MassRemoteCMDToolStripMenuItem.Name = "MassRemoteCMDToolStripMenuItem"
+        Me.MassRemoteCMDToolStripMenuItem.Size = New System.Drawing.Size(226, 22)
+        Me.MassRemoteCMDToolStripMenuItem.Text = "Mass Remote CMD"
+        '
+        'BSODCrashToolStripMenuItem
+        '
+        Me.BSODCrashToolStripMenuItem.Name = "BSODCrashToolStripMenuItem"
+        Me.BSODCrashToolStripMenuItem.Size = New System.Drawing.Size(185, 22)
+        Me.BSODCrashToolStripMenuItem.Text = "BSOD Crash"
+        '
+        'OpenURLToolStripMenuItem1
+        '
+        Me.OpenURLToolStripMenuItem1.Name = "OpenURLToolStripMenuItem1"
+        Me.OpenURLToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
+        Me.OpenURLToolStripMenuItem1.Text = "Open URL"
+        '
+        'MassOpenURLToolStripMenuItem
+        '
+        Me.MassOpenURLToolStripMenuItem.Name = "MassOpenURLToolStripMenuItem"
+        Me.MassOpenURLToolStripMenuItem.Size = New System.Drawing.Size(226, 22)
+        Me.MassOpenURLToolStripMenuItem.Text = "Mass Open URL"
+        '
+        'MassBSODToolStripMenuItem
+        '
+        Me.MassBSODToolStripMenuItem.Name = "MassBSODToolStripMenuItem"
+        Me.MassBSODToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.MassBSODToolStripMenuItem.Text = "Mass BSOD"
+        '
+        'MassDDoSAttackBOTNETToolStripMenuItem
+        '
+        Me.MassDDoSAttackBOTNETToolStripMenuItem.Name = "MassDDoSAttackBOTNETToolStripMenuItem"
+        Me.MassDDoSAttackBOTNETToolStripMenuItem.Size = New System.Drawing.Size(226, 22)
+        Me.MassDDoSAttackBOTNETToolStripMenuItem.Text = "Mass DDoS Attack [BOTNET]"
+        '
+        'MassMessageBoxToolStripMenuItem
+        '
+        Me.MassMessageBoxToolStripMenuItem.Name = "MassMessageBoxToolStripMenuItem"
+        Me.MassMessageBoxToolStripMenuItem.Size = New System.Drawing.Size(226, 22)
+        Me.MassMessageBoxToolStripMenuItem.Text = "Mass MessageBox"
+        '
+        'ChangeSettingsToolStripMenuItem
+        '
+        Me.ChangeSettingsToolStripMenuItem.Name = "ChangeSettingsToolStripMenuItem"
+        Me.ChangeSettingsToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.ChangeSettingsToolStripMenuItem.Text = "Change Settings"
+        '
+        'MassSettinsChangeToolStripMenuItem
+        '
+        Me.MassSettinsChangeToolStripMenuItem.Name = "MassSettinsChangeToolStripMenuItem"
+        Me.MassSettinsChangeToolStripMenuItem.Size = New System.Drawing.Size(183, 22)
+        Me.MassSettinsChangeToolStripMenuItem.Text = "Mass Settins Change"
         '
         'RatPanel
         '
@@ -716,6 +831,8 @@ Partial Class RatPanel
         Me.ClientsTab.ResumeLayout(False)
         CType(Me.connectedClientsView, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ConfigTab.ResumeLayout(False)
+        Me.GroupBox5.ResumeLayout(False)
+        Me.GroupBox5.PerformLayout()
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
         Me.GroupBox3.ResumeLayout(False)
@@ -726,8 +843,7 @@ Partial Class RatPanel
         Me.BuilderTab.ResumeLayout(False)
         Me.BuilderTab.PerformLayout()
         Me.optionsCMS.ResumeLayout(False)
-        Me.GroupBox5.ResumeLayout(False)
-        Me.GroupBox5.PerformLayout()
+        Me.everyoneCMS.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -795,8 +911,24 @@ Partial Class RatPanel
     Friend WithEvents antivirus As DataGridViewTextBoxColumn
     Friend WithEvents FunToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents MessageboxToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents BSODToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents OpenURLToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GroupBox5 As GroupBox
     Friend WithEvents TextBox2 As TextBox
+    Friend WithEvents BSODCrashToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents OpenURLToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents ChangeSettingsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents everyoneCMS As ContextMenuStrip
+    Friend WithEvents ComputersToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents RebootAllComputersToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ShutdownAllComputersToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ShutdownAllRATSToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents RebootAllRATSToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents UninstallAllClientsToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MassBSODToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolsToolStripMenuItem1 As ToolStripMenuItem
+    Friend WithEvents MassRemoteExecuteToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MassRemoteCMDToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MassOpenURLToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MassDDoSAttackBOTNETToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MassMessageBoxToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MassSettinsChangeToolStripMenuItem As ToolStripMenuItem
 End Class

