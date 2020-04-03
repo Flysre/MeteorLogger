@@ -89,6 +89,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LockedWindow.Designer.vb">
+      <DependentUpon>LockedWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="LockedWindow.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="RemoteChat.Designer.vb">
       <DependentUpon>RemoteChat.vb</DependentUpon>
     </Compile>
@@ -120,6 +126,9 @@
     <Compile Include="Screenshare.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="LockedWindow.resx">
+      <DependentUpon>LockedWindow.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RemoteChat.resx">
       <DependentUpon>RemoteChat.vb</DependentUpon>
     </EmbeddedResource>

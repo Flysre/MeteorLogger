@@ -5,5 +5,11 @@
     <Setting Name="vpsurl" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://185.62.188.189/RATZ/</Value>
     </Setting>
+    <Setting Name="bl" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="blmsg" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

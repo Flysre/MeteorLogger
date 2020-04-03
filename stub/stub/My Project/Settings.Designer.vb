@@ -65,6 +65,30 @@ Namespace My
                 Me("vpsurl") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property bl() As Boolean
+            Get
+                Return CType(Me("bl"),Boolean)
+            End Get
+            Set
+                Me("bl") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property blmsg() As String
+            Get
+                Return CType(Me("blmsg"),String)
+            End Get
+            Set
+                Me("blmsg") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
