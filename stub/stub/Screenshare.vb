@@ -9,49 +9,54 @@ Imports System.Threading
 Module Screenshare
     Private Declare Sub mouse_event Lib "user32.dll" (ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal cButtons As Integer, ByVal dwExtraInfo As IntPtr)
 
-    ' Private m_MyForm As MainForm
-    'Public ReadOnly Property MyForm() As MainForm
-    'Get
-    'If IsNothing(m_MyForm) Then m_MyForm = New MainForm
-    'Return m_MyForm
-    'End Get
-    'End Property
-
-    Private vpsURL As String = My.Settings.vpsurl
+    Private m_MyForm As MainForm
+    Public ReadOnly Property MyForm() As MainForm
+        Get
+            If IsNothing(m_MyForm) Then m_MyForm = New MainForm
+            Return m_MyForm
+        End Get
+    End Property
 
     Private Structure PointAPI
         Public x As Integer
         Public y As Integer
     End Structure
     Private Structure CursorInfo
-        ' Token: 0x04000037 RID: 55
         Public cbSize As Integer
-
-        ' Token: 0x04000038 RID: 56
         Public flags As Integer
-
-        ' Token: 0x04000039 RID: 57
         Public hCursor As IntPtr
-
-        ' Token: 0x0400003A RID: 58
         Public ptScreenPos As PointAPI
     End Structure
 
     Private Declare Function GetCursorInfo Lib "user32.dll" (<System.Runtime.InteropServices.OutAttribute()> ByRef pci As CursorInfo) As Boolean
     Private Declare Function DrawIcon Lib "user32.dll" (hDC As IntPtr, X As Integer, Y As Integer, hIcon As IntPtr) As Boolean
-    Public Const MOUSEEVENTF_LEFTDOWN = &H2 ' left button down
-    Public Const MOUSEEVENTF_LEFTUP = &H4 ' left button up
-    Public Const MOUSEEVENTF_MIDDLEDOWN = &H20 ' middle button down
-    Public Const MOUSEEVENTF_MIDDLEUP = &H40 ' middle button up
-    Public Const MOUSEEVENTF_RIGHTDOWN = &H8 ' right button down
-    Public Const MOUSEEVENTF_RIGHTUP = &H10 ' right button up
-    Public WithEvents screenshareBW As BackgroundWorker
-    Public screenshareQuality As Long = 25L
-    Public screenshareFluxInterval As Integer = 500
+    Private Const MOUSEEVENTF_LEFTDOWN = &H2 ' left button down
+    Private Const MOUSEEVENTF_LEFTUP = &H4 ' left button up
+    Private Const MOUSEEVENTF_MIDDLEDOWN = &H20 ' middle button down
+    Private Const MOUSEEVENTF_MIDDLEUP = &H40 ' middle button up
+    Private Const MOUSEEVENTF_RIGHTDOWN = &H8 ' right button down
+    Private Const MOUSEEVENTF_RIGHTUP = &H10 ' right button up
 
-    Public Sub InitFluxManager()
-        screenshareBW = New BackgroundWorker()
-        screenshareBW.WorkerSupportsCancellation = True
+    Private WithEvents screenshareBW As New BackgroundWorker
+    Private screenshareQuality As Long = 25L
+    Private screenshareFluxInterval As Integer = 500
+
+    Public Sub SetupFluxManager(quality As Long, fluxInterval As Integer)
+        If Not screenshareBW.WorkerSupportsCancellation Then  ' TODO: Any better way ?
+            screenshareBW.WorkerSupportsCancellation = True
+        End If
+
+        screenshareQuality = quality
+        screenshareFluxInterval = fluxInterval
+
+        If Not screenshareBW.IsBusy Then
+            Screenshare.screenshareBW.RunWorkerAsync()
+        End If
+    End Sub
+
+    Public Sub StopScreenshare()
+        ' TODO: Fix screenshare stop
+        screenshareBW.CancelAsync()
     End Sub
 
     Public Function GetEncoderInfo(ByVal mimeType As String) As ImageCodecInfo

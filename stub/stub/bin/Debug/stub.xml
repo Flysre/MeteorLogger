@@ -32,5 +32,11 @@ stub
  TODO: Add mutex
  </summary>
 </member>
+<member name="M:stub.UIFeatures.LoopOpenCD(System.Int32)">
+ <summary>
+ Opens the CD (x amount of times) using the Media Control Interface
+ </summary>
+ <param name="amount"></param>
+</member>
 </members>
 </doc>

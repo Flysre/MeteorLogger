@@ -104,6 +104,7 @@ EndOfTreatement:
     End Sub
 
     Private Sub sendButton_Click(sender As Object, e As EventArgs) Handles sendButton.Click
+        ' TODO : Make a cooldown
         sendButtonClickSub()
     End Sub
 
