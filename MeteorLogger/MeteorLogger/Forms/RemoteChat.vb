@@ -82,6 +82,7 @@ Public Class RemoteChat
     End Sub
 
     Private Sub sendButton_Click(sender As Object, e As EventArgs) Handles sendButton.Click
+        ' TODO : Make a cooldown
         sendButtonClickSub()
     End Sub
 
@@ -109,11 +110,10 @@ Public Class RemoteChat
                 Exit While
             End If
 
-            Console.WriteLine("parsedmsg: " & parsedMsg(0))
-
             If Not firstIter Then
                 Dim decodedMsg As String =
                 Encoding.UTF8.GetString(Convert.FromBase64String(parsedMsg(0)))
+
 
                 messageList.Add(New Tuple(Of String, Boolean)(decodedMsg, False))
             End If

