@@ -16,11 +16,14 @@ Actual :
 - Remote Execute
 - Messagebox
 - Remote mouse control
+- Open URL
+- Open/close cd (using MCI)
+- Client blacklist
+- Lock victim's computer
 
 Incoming :
 - Keylogger
 - Remote Shell (with console response)
-- Open URL
 - Password stealer (Chrome, Firefox, Opera...)
 - Anti debugger/decompiler, antivm/sandbox
 - Artificial stub size supply (EOF random string injection)
@@ -33,11 +36,8 @@ Incoming :
 - Change Wallpaper
 - System logs
 - Advanced victim statistics
-- Open/close cd (using MCI)
 - Hide taskbar
 - Invert mouse
-- Client blacklist
-- Lock victim's computer
 - Background mp3
 - Background voice (SAPI)
 - Smart file stealer
