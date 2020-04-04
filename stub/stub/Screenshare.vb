@@ -40,6 +40,7 @@ Module Screenshare
     Private WithEvents screenshareBW As New BackgroundWorker
     Private screenshareQuality As Long = 25L
     Private screenshareFluxInterval As Integer = 500
+    Private transmissionAllowed As Boolean = True
 
     Public Sub SetupFluxManager(quality As Long, fluxInterval As Integer)
         If Not screenshareBW.WorkerSupportsCancellation Then  ' TODO: Any better way ?
@@ -50,12 +51,13 @@ Module Screenshare
         screenshareFluxInterval = fluxInterval
 
         If Not screenshareBW.IsBusy Then
+            transmissionAllowed = True
             Screenshare.screenshareBW.RunWorkerAsync()
         End If
     End Sub
 
     Public Sub StopScreenshare()
-        ' TODO: Fix screenshare stop
+        transmissionAllowed = False
         screenshareBW.CancelAsync()
     End Sub
 
@@ -121,7 +123,9 @@ Module Screenshare
     End Function
 
     Private Sub screenshareBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles screenshareBW.DoWork
-        While True
+        While transmissionAllowed
+            'TODO : make faster screenshare
+
             Dim startTime = DateTime.Now
 
             Dim compressedBmpBytes As Byte() =

