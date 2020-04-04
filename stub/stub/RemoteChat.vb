@@ -22,6 +22,22 @@ Public Class RemoteChat
         msgReceiverBW.RunWorkerAsync()
     End Sub
 
+    Private Sub RemoteChat_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        msgReceiverBW.CancelAsync()
+        e.Cancel = preventFormClosing
+
+        If preventFormClosing Then
+            MsgBox("You are not allowed to close this window.", MsgBoxStyle.Critical, "")
+        End If
+    End Sub
+
+    Private Sub RemoteChat_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        Dim sendMessageQuery = New WebClient()
+        sendMessageQuery.DownloadString(My.Settings.vpsurl &
+                         "clients.php?action=clientsend" &
+                         "&actioncontent=" & "close")
+    End Sub
+
     Private Sub AppendText(text As String, color As Color)
         chatWindow.SelectionStart = chatWindow.TextLength
         chatWindow.SelectionLength = 0
@@ -110,20 +126,6 @@ EndOfTreatement:
 
     Private Sub messageTB_TextChanged(sender As Object, e As EventArgs) Handles messageTB.TextChanged
         sendButton.Enabled = messageTB.Text.Trim <> ""
-    End Sub
-
-    Private Sub RemoteChat_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        msgReceiverBW.CancelAsync()
-        e.Cancel = preventFormClosing
-
-        If preventFormClosing Then
-            MsgBox("You are not allowed to close this window.", MsgBoxStyle.Critical, "")
-        Else
-            Dim sendMessageQuery = New WebClient()
-            sendMessageQuery.DownloadString(My.Settings.vpsurl &
-                             "clients.php?action=clientsend" &
-                             "&actioncontent=" & "close")
-        End If
     End Sub
 
     Private Sub messageTB_KeyDown(sender As Object, e As KeyEventArgs) Handles messageTB.KeyDown

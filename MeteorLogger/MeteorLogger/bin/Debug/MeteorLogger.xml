@@ -107,7 +107,7 @@ MeteorLogger
   Recherche une ressource localisée de type System.Drawing.Bitmap.
 </summary>
 </member>
-<member name="M:WindowsApplication1.RatPanel.runDirectPanelCommand(System.String,System.String,System.String[])">
+<member name="M:WindowsApplication1.RatPanel.RunDirectPanelCommand(System.String,System.String,System.String[])">
  <summary>
  This function automatically grabs the target IP,
  then asks for safety and finally proceed to a direct command query on the HTTP server

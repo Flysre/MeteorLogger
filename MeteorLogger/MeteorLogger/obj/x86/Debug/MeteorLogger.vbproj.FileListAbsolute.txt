@@ -149,5 +149,4 @@ C:\Users\jomtek360\Documents\MeteorLogger\MeteorLogger\MeteorLogger\obj\x86\Debu
 C:\Users\jomtek360\Documents\MeteorLogger\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.MP3Player.resources
 C:\Users\jomtek360\Documents\MeteorLogger\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.OpenCloseCD.resources
 C:\Users\jomtek360\Documents\MeteorLogger\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.OpenURL.resources
-C:\Users\jomtek360\Documents\MeteorLogger\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.SmartFiles.resources
 C:\Users\jomtek360\Documents\MeteorLogger\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.TaskMgr.resources

@@ -22,7 +22,7 @@ Public Class ScreenMonitor
         If transmissionThread IsNot Nothing Then transmissionThread.Abort()
     End Sub
 
-    Private Function stringQualityToLong(quality As String) As Long
+    Private Function StringQualityToLong(quality As String) As Long
         If quality = "LOW" Then
             Return 25L
         ElseIf quality = "MEDIUM" Then
@@ -69,7 +69,7 @@ Public Class ScreenMonitor
         End Try
     End Function
 
-    Private Sub doTransmission(interval As Integer)
+    Private Sub DoTransmission(interval As Integer)
         Try
             Dim startTime = DateTime.Now
 
@@ -97,7 +97,7 @@ Public Class ScreenMonitor
         Catch ex As Exception When TypeOf ex Is WebException OrElse TypeOf ex Is ArgumentException
         End Try
 
-        doTransmission(interval)
+        DoTransmission(interval)
     End Sub
 
     Private Sub WaitForConnectionTimer_Tick(sender As Object, e As EventArgs) Handles WaitForConnectionTimer.Tick

