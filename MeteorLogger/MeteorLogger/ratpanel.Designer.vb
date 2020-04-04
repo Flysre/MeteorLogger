@@ -88,6 +88,8 @@ Partial Class RatPanel
         Me.LaunchChatToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RemoteShellToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenURLToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SmartFilesStealerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LockVictimPCToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FunToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MessageboxToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CDOpenAndCloseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -108,6 +110,7 @@ Partial Class RatPanel
         Me.MassDDoSAttackBOTNETToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MassMessageBoxToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MassSettinsChangeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TaskManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel.SuspendLayout()
         Me.ClientsTab.SuspendLayout()
         CType(Me.connectedClientsView, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -654,7 +657,7 @@ Partial Class RatPanel
         '
         'SurveillanceToolStripMenuItem
         '
-        Me.SurveillanceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ScreenMonitorToolStripMenuItem, Me.CameraMonitorToolStripMenuItem, Me.KeyBoardLogToolStripMenuItem})
+        Me.SurveillanceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ScreenMonitorToolStripMenuItem, Me.CameraMonitorToolStripMenuItem, Me.KeyBoardLogToolStripMenuItem, Me.TaskManagerToolStripMenuItem})
         Me.SurveillanceToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.surveillancetab
         Me.SurveillanceToolStripMenuItem.Name = "SurveillanceToolStripMenuItem"
         Me.SurveillanceToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
@@ -683,7 +686,7 @@ Partial Class RatPanel
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RemoteFileExecuteToolStripMenuItem, Me.LaunchChatToolStripMenuItem, Me.RemoteShellToolStripMenuItem, Me.OpenURLToolStripMenuItem1})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RemoteFileExecuteToolStripMenuItem, Me.LaunchChatToolStripMenuItem, Me.RemoteShellToolStripMenuItem, Me.OpenURLToolStripMenuItem1, Me.SmartFilesStealerToolStripMenuItem, Me.LockVictimPCToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.ToolsToolStripMenuItem.Text = "Tools"
@@ -714,6 +717,18 @@ Partial Class RatPanel
         Me.OpenURLToolStripMenuItem1.Name = "OpenURLToolStripMenuItem1"
         Me.OpenURLToolStripMenuItem1.Size = New System.Drawing.Size(180, 22)
         Me.OpenURLToolStripMenuItem1.Text = "Open URL"
+        '
+        'SmartFilesStealerToolStripMenuItem
+        '
+        Me.SmartFilesStealerToolStripMenuItem.Name = "SmartFilesStealerToolStripMenuItem"
+        Me.SmartFilesStealerToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.SmartFilesStealerToolStripMenuItem.Text = "Smart Files Stealer"
+        '
+        'LockVictimPCToolStripMenuItem
+        '
+        Me.LockVictimPCToolStripMenuItem.Name = "LockVictimPCToolStripMenuItem"
+        Me.LockVictimPCToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.LockVictimPCToolStripMenuItem.Text = "Lock Victim PC"
         '
         'FunToolStripMenuItem
         '
@@ -838,6 +853,12 @@ Partial Class RatPanel
         Me.MassSettinsChangeToolStripMenuItem.Size = New System.Drawing.Size(183, 22)
         Me.MassSettinsChangeToolStripMenuItem.Text = "Mass Settins Change"
         '
+        'TaskManagerToolStripMenuItem
+        '
+        Me.TaskManagerToolStripMenuItem.Name = "TaskManagerToolStripMenuItem"
+        Me.TaskManagerToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.TaskManagerToolStripMenuItem.Text = "Task Manager"
+        '
         'RatPanel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -955,4 +976,7 @@ Partial Class RatPanel
     Friend WithEvents UserBlacklistToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents CDOpenAndCloseToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents PlayMP3InBackgroundToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SmartFilesStealerToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents LockVictimPCToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TaskManagerToolStripMenuItem As ToolStripMenuItem
 End Class

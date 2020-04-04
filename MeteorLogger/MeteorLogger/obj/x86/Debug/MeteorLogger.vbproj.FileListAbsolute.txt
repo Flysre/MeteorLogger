@@ -141,3 +141,6 @@ C:\Users\jomtek360\Desktop\MeteorLogger-develop\MeteorLogger\MeteorLogger\obj\x8
 C:\Users\jomtek360\Desktop\MeteorLogger-develop\MeteorLogger\MeteorLogger\obj\x86\Debug\MeteorLogger.exe
 C:\Users\jomtek360\Desktop\MeteorLogger-develop\MeteorLogger\MeteorLogger\obj\x86\Debug\MeteorLogger.xml
 C:\Users\jomtek360\Desktop\MeteorLogger-develop\MeteorLogger\MeteorLogger\obj\x86\Debug\MeteorLogger.pdb
+C:\Users\Skynoze\Desktop\MeteorLogger-develop\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.LockPC.resources
+C:\Users\Skynoze\Desktop\MeteorLogger-develop\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.SmartFiles.resources
+C:\Users\Skynoze\Desktop\MeteorLogger-develop\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.TaskMgr.resources

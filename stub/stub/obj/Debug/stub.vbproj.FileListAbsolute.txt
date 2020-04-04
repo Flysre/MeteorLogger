@@ -129,3 +129,4 @@ C:\Users\jomtek360\Desktop\MeteorLogger-develop\stub\stub\obj\Debug\stub.vbproj.
 C:\Users\jomtek360\Desktop\MeteorLogger-develop\stub\stub\obj\Debug\stub.exe
 C:\Users\jomtek360\Desktop\MeteorLogger-develop\stub\stub\obj\Debug\stub.xml
 C:\Users\jomtek360\Desktop\MeteorLogger-develop\stub\stub\obj\Debug\stub.pdb
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Debug\stub.LockedWindow.resources

