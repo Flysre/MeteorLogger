@@ -151,3 +151,5 @@ C:\Users\jomtek360\Documents\MeteorLogger\MeteorLogger\MeteorLogger\obj\x86\Debu
 C:\Users\jomtek360\Documents\MeteorLogger\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.TaskMgr.resources
 C:\Users\Skynoze\Desktop\MeteorLogger-develop\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.GetClipboard.resources
 C:\Users\jomtek360\Documents\MeteorLogger\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.GetClipboard.resources
+C:\Users\Skynoze\Desktop\MeteorLogger-develop\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.AdvancedStats.resources
+C:\Users\jomtek360\Documents\MeteorLogger\MeteorLogger\MeteorLogger\obj\x86\Debug\WindowsApplication1.AdvancedStats.resources

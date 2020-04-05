@@ -1,0 +1,14 @@
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\bin\Release\stub.exe.config
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\bin\Release\stub.exe
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\bin\Release\stub.pdb
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\bin\Release\stub.xml
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Release\stub.vbprojAssemblyReference.cache
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Release\stub.LockedWindow.resources
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Release\stub.RemoteChat.resources
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Release\stub.MainForm.resources
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Release\stub.Resources.resources
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Release\stub.vbproj.GenerateResource.cache
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Release\stub.vbproj.CoreCompileInputs.cache
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Release\stub.exe
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Release\stub.xml
+C:\Users\jomtek360\Documents\MeteorLogger\stub\stub\obj\Release\stub.pdb

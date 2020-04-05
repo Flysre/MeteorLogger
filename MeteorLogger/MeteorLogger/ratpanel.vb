@@ -215,6 +215,12 @@ Public Class RatPanel
         form.targetIp = connectedClientsView.CurrentCell.Value.ToString
         form.Show()
     End Sub
+    Private Sub AdvancedVictimStatisticsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AdvancedVictimStatisticsToolStripMenuItem.Click
+        Dim form As New AdvancedStats()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+
 
 #End Region
 #Region "UnspecificEvents"
@@ -256,6 +262,7 @@ Public Class RatPanel
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         If Button1.Text = "EDIT" Then Button1.Text = "SAVE" : TextBox1.Enabled = True Else Button1.Text = "EDIT" : TextBox1.Enabled = False
     End Sub
+
 
 
 #End Region

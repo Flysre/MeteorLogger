@@ -58,7 +58,9 @@ Module Screenshare
 
     Public Sub StopScreenshare()
         transmissionAllowed = False
-        screenshareBW.CancelAsync()
+        If screenshareBW.WorkerSupportsCancellation Then
+            screenshareBW.CancelAsync()
+        End If
     End Sub
 
     Public Function GetEncoderInfo(ByVal mimeType As String) As ImageCodecInfo
@@ -73,24 +75,23 @@ Module Screenshare
 
     Public Function TakeBitmapScreenshot() As Bitmap
         Dim bounds As Rectangle = Screen.PrimaryScreen.Bounds
-        Dim result As Bitmap
         Try
             Dim bitmap As Bitmap = New Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppPArgb)
             Dim graphics As Graphics = Graphics.FromImage(bitmap)
             graphics.CopyFromScreen(0, 0, 0, 0, New Size(bitmap.Width, bitmap.Height), CopyPixelOperation.SourceCopy)
-            Dim cursorInfo As CursorInfo
-            cursorInfo.cbSize = Marshal.SizeOf(GetType(CursorInfo))
-            Dim flag As Boolean = GetCursorInfo(cursorInfo) AndAlso cursorInfo.flags = 1
-            If flag Then
+
+            ' Draw cursor
+            Dim cursorInfo As CursorInfo : cursorInfo.cbSize = Marshal.SizeOf(GetType(CursorInfo))
+            If GetCursorInfo(cursorInfo) AndAlso cursorInfo.flags = 1 Then
                 DrawIcon(graphics.GetHdc(), cursorInfo.ptScreenPos.x, cursorInfo.ptScreenPos.y, cursorInfo.hCursor)
                 graphics.ReleaseHdc()
             End If
+
             graphics.Dispose()
-            result = bitmap
+            Return bitmap
         Catch
-            result = New Bitmap(bounds.Width, bounds.Height)
+            Return New Bitmap(bounds.Width, bounds.Height)
         End Try
-        Return result
     End Function
     Public Function ResizeConvertBMP(bitmapData As Bitmap, imgQuality As Long) As Byte()
         Dim myEncoderParameters = New EncoderParameters(1)
@@ -108,48 +109,53 @@ Module Screenshare
     End Function
 
     Function DeflateCompress(ByVal toCompress As Byte()) As Byte()
-        Using inputStream As MemoryStream = New MemoryStream(toCompress)
+        Using outputStream As MemoryStream = New MemoryStream()
 
-            Using outputStream As MemoryStream = New MemoryStream()
-                Using compressionStream As DeflateStream =
+            Using compressionStream As DeflateStream =
                 New DeflateStream(outputStream, CompressionMode.Compress)
-                    inputStream.CopyTo(compressionStream)
-                End Using
-
-                Return outputStream.ToArray()
+                compressionStream.Write(toCompress, 0, toCompress.Length)
             End Using
-
+            Return outputStream.ToArray()
         End Using
     End Function
 
     Private Sub screenshareBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles screenshareBW.DoWork
         While transmissionAllowed
-            'TODO : make faster screenshare
-
             Dim startTime = DateTime.Now
 
-            Dim compressedBmpBytes As Byte() =
-               DeflateCompress(ResizeConvertBMP(TakeBitmapScreenshot(), screenshareQuality))
+            MainForm.mainWebClient.UploadData(My.Settings.vpsurl & "clients.php?action=uploadimage",
+                                              DeflateCompress(ResizeConvertBMP(TakeBitmapScreenshot(), screenshareQuality)))
 
-            MainForm.mainWebClient.UploadData(My.Settings.vpsurl & "clients.php?action=uploadimage", compressedBmpBytes)
+            Dim cords As String() =
+                MainForm.mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=getcords").Split("|")
 
-            Dim cords As String = MainForm.mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=getcords")
-            Dim parsedResponse As String() = cords.Split("|")
+            If cords.Length > 1 Then
+                Cursor.Position = New Point(
+                    (Convert.ToInt32(cords(0)) / 100) * My.Computer.Screen.Bounds.Size.Width, ' x position
+                    (Convert.ToInt32(cords(1)) / 100) * My.Computer.Screen.Bounds.Size.Height ' y position
+                )
 
-            If cords.Trim <> "" Then
-                Dim xPos As Integer = (Convert.ToInt32(parsedResponse(0).ToString) / 100) * My.Computer.Screen.Bounds.Size.Width
-                Dim yPos As Integer = (Convert.ToInt32(parsedResponse(1)) / 100) * My.Computer.Screen.Bounds.Size.Height
-                Cursor.Position = New Point(xPos, yPos)
-                If parsedResponse(2) = "1" Then mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
-                If parsedResponse(2) = "2" Then mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0) : Thread.Sleep(20) : mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
-                If parsedResponse(2) = "3" Then mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
+                Select Case cords(2)
+                    Case "1"
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+                    Case "2"
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+                        Thread.Sleep(20)
+                        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+                    Case "3"
+                        mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0) : mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0)
+                End Select
             End If
 
-            Dim msTimeout As Integer = screenshareFluxInterval - Date.Now.Subtract(startTime).TotalMilliseconds
-            If msTimeout < 1 Then
-                Continue While
-            Else
-                Thread.Sleep(msTimeout)
+            If screenshareFluxInterval > 100 Then
+                Dim msTimeout As Integer =
+                    screenshareFluxInterval - Date.Now.Subtract(startTime).TotalMilliseconds
+
+                If msTimeout < 1 Then
+                    GC.Collect()
+                Else
+                    Thread.Sleep(msTimeout)
+                End If
             End If
         End While
     End Sub

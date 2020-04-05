@@ -84,6 +84,7 @@ Partial Class RatPanel
         Me.CameraMonitorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.KeyBoardLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TaskManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GetClipboardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RemoteFileExecuteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LaunchChatToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -110,7 +111,7 @@ Partial Class RatPanel
         Me.MassDDoSAttackBOTNETToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MassMessageBoxToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MassSettinsChangeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GetClipboardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AdvancedVictimStatisticsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Panel.SuspendLayout()
         Me.ClientsTab.SuspendLayout()
         CType(Me.connectedClientsView, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -657,7 +658,7 @@ Partial Class RatPanel
         '
         'SurveillanceToolStripMenuItem
         '
-        Me.SurveillanceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ScreenMonitorToolStripMenuItem, Me.CameraMonitorToolStripMenuItem, Me.KeyBoardLogToolStripMenuItem, Me.TaskManagerToolStripMenuItem, Me.GetClipboardToolStripMenuItem})
+        Me.SurveillanceToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ScreenMonitorToolStripMenuItem, Me.CameraMonitorToolStripMenuItem, Me.KeyBoardLogToolStripMenuItem, Me.TaskManagerToolStripMenuItem, Me.GetClipboardToolStripMenuItem, Me.AdvancedVictimStatisticsToolStripMenuItem})
         Me.SurveillanceToolStripMenuItem.Image = Global.WindowsApplication1.My.Resources.Resources.surveillancetab
         Me.SurveillanceToolStripMenuItem.Name = "SurveillanceToolStripMenuItem"
         Me.SurveillanceToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
@@ -689,6 +690,12 @@ Partial Class RatPanel
         Me.TaskManagerToolStripMenuItem.Name = "TaskManagerToolStripMenuItem"
         Me.TaskManagerToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.TaskManagerToolStripMenuItem.Text = "Task Manager"
+        '
+        'GetClipboardToolStripMenuItem
+        '
+        Me.GetClipboardToolStripMenuItem.Name = "GetClipboardToolStripMenuItem"
+        Me.GetClipboardToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.GetClipboardToolStripMenuItem.Text = "Get Clipboard"
         '
         'ToolsToolStripMenuItem
         '
@@ -853,11 +860,11 @@ Partial Class RatPanel
         Me.MassSettinsChangeToolStripMenuItem.Size = New System.Drawing.Size(183, 22)
         Me.MassSettinsChangeToolStripMenuItem.Text = "Mass Settins Change"
         '
-        'GetClipboardToolStripMenuItem
+        'AdvancedVictimStatisticsToolStripMenuItem
         '
-        Me.GetClipboardToolStripMenuItem.Name = "GetClipboardToolStripMenuItem"
-        Me.GetClipboardToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.GetClipboardToolStripMenuItem.Text = "Get Clipboard"
+        Me.AdvancedVictimStatisticsToolStripMenuItem.Name = "AdvancedVictimStatisticsToolStripMenuItem"
+        Me.AdvancedVictimStatisticsToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.AdvancedVictimStatisticsToolStripMenuItem.Text = "Advanced Statistics"
         '
         'RatPanel
         '
@@ -979,4 +986,5 @@ Partial Class RatPanel
     Friend WithEvents LockVictimPCToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents TaskManagerToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GetClipboardToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents AdvancedVictimStatisticsToolStripMenuItem As ToolStripMenuItem
 End Class

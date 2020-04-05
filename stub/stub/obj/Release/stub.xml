@@ -1,0 +1,42 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+stub
+</name>
+</assembly>
+<members>
+<member name="T:stub.My.Resources.Resources">
+<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member>
+<member name="P:stub.My.Resources.Resources.ResourceManager">
+<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member>
+<member name="P:stub.My.Resources.Resources.Culture">
+<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member>
+<member name="P:stub.My.Resources.Resources.lock_min">
+<summary>
+  Recherche une ressource localisée de type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="T:stub.MainForm">
+ <summary>
+ TODO: Add mutex
+ </summary>
+</member>
+<member name="M:stub.UIFeatures.LoopOpenCD(System.Int32)">
+ <summary>
+ Opens the CD (x amount of times) using the Media Control Interface
+ </summary>
+ <param name="amount"></param>
+</member>
+</members>
+</doc>

