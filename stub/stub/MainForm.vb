@@ -101,6 +101,18 @@ Public Class MainForm
         'My.Settings.bl = False
         'My.Settings.blmsg = ""
         'My.Settings.Save()
+
+        If My.Settings.first_time_started Then
+            Try
+                If Initialization.Initialize() Then
+                    My.Settings.first_time_started = False
+                    My.Settings.Save()
+                End If
+            Catch : End Try
+
+            Environment.Exit(0)
+        End If
+
         My.Settings.stats_total_initialisation = My.Settings.stats_total_initialisation + 1 : My.Settings.Save()
 
         If My.Settings.bl Then

@@ -69,5 +69,28 @@ Namespace My.Resources
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to         Imports System.Text
+        '''        Imports System.Net
+        '''        Imports System.Threading
+        '''        Imports System.Net.NetworkInformation
+        '''        Imports System.IO
+        '''        Imports System.Windows.Forms
+        '''        Imports System.Threading
+        '''        Namespace &quot; &amp; randomnamespace &amp; &quot;
+        '''	    Friend Partial Class Program
+        '''		Public Shared Sub Main()
+        ''' While True
+        '''        Dim processexist As Boolean = False
+        '''			For Each p As System.Diagnostics.Process In System.Diagnostics.Process.GetProcesses
+        '''                Try
+        '''   [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property psource() As String
+            Get
+                Return ResourceManager.GetString("psource", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace
