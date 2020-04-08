@@ -127,7 +127,7 @@ Partial Class ScreenMonitor
         'WaitForConnectionTimer
         '
         Me.WaitForConnectionTimer.Enabled = True
-        Me.WaitForConnectionTimer.Interval = 1000
+        Me.WaitForConnectionTimer.Interval = 500
         '
         'coordinated
         '
