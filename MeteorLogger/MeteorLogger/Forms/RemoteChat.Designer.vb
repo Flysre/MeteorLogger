@@ -35,6 +35,9 @@ Partial Class RemoteChat
         '
         'chatWindow
         '
+        Me.chatWindow.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chatWindow.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chatWindow.Location = New System.Drawing.Point(12, 12)
         Me.chatWindow.Name = "chatWindow"
@@ -45,6 +48,7 @@ Partial Class RemoteChat
         '
         'messageTB
         '
+        Me.messageTB.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.messageTB.Location = New System.Drawing.Point(12, 240)
         Me.messageTB.MaxLength = 150
         Me.messageTB.Name = "messageTB"
@@ -53,6 +57,7 @@ Partial Class RemoteChat
         '
         'sendButton
         '
+        Me.sendButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.sendButton.Enabled = False
         Me.sendButton.Location = New System.Drawing.Point(373, 240)
         Me.sendButton.Name = "sendButton"
@@ -63,6 +68,7 @@ Partial Class RemoteChat
         '
         'topMostCB
         '
+        Me.topMostCB.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.topMostCB.AutoSize = True
         Me.topMostCB.Checked = True
         Me.topMostCB.CheckState = System.Windows.Forms.CheckState.Checked
@@ -75,6 +81,7 @@ Partial Class RemoteChat
         '
         'showIconCB
         '
+        Me.showIconCB.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.showIconCB.AutoSize = True
         Me.showIconCB.Location = New System.Drawing.Point(12, 266)
         Me.showIconCB.Name = "showIconCB"
@@ -85,6 +92,7 @@ Partial Class RemoteChat
         '
         'allowCloseChatCB
         '
+        Me.allowCloseChatCB.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.allowCloseChatCB.AutoSize = True
         Me.allowCloseChatCB.Location = New System.Drawing.Point(163, 266)
         Me.allowCloseChatCB.Name = "allowCloseChatCB"
@@ -108,7 +116,6 @@ Partial Class RemoteChat
         Me.Controls.Add(Me.sendButton)
         Me.Controls.Add(Me.messageTB)
         Me.Controls.Add(Me.chatWindow)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "RemoteChat"
         Me.ShowIcon = False
         Me.Text = "Remote Chat @ "

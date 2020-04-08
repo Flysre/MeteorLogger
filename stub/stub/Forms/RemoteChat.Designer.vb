@@ -51,6 +51,7 @@ Partial Class RemoteChat
         '
         'chatWindow
         '
+        Me.chatWindow.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chatWindow.Location = New System.Drawing.Point(12, 8)
         Me.chatWindow.Name = "chatWindow"
         Me.chatWindow.ReadOnly = True
@@ -77,6 +78,7 @@ Partial Class RemoteChat
         Me.Controls.Add(Me.messageTB)
         Me.Controls.Add(Me.chatWindow)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
         Me.Name = "RemoteChat"
         Me.Text = "Someone is chatting with you..."
         Me.TopMost = True

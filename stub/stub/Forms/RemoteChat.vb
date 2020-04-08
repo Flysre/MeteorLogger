@@ -18,7 +18,7 @@ Public Class RemoteChat
         End Get
     End Property
 
-    Private Sub RemoteChat_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Public Sub StartProcessingMessages()
         Control.CheckForIllegalCrossThreadCalls = False
         msgReceiverBW.RunWorkerAsync()
         paramUpdateTimer.Start()
@@ -64,7 +64,9 @@ Public Class RemoteChat
 
             If messageList.Count > 100 Then messageList.Clear()
             chatWindow.ScrollToCaret() : chatWindow.Refresh()
-        Catch ex As AccessViolationException
+        Catch ex As Exception When TypeOf ex Is AccessViolationException OrElse TypeOf ex Is ObjectDisposedException
+            System.Threading.Thread.Sleep(500)
+            Console.WriteLine("error")
             RefreshChat()
         End Try
     End Sub
