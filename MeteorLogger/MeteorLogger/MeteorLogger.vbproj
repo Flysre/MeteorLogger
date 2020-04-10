@@ -81,10 +81,52 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\remoteshell.Designer.vb">
-      <DependentUpon>remoteshell.vb</DependentUpon>
+    <Compile Include="Forms\AdvancedStats.Designer.vb">
+      <DependentUpon>AdvancedStats.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\remoteshell.vb">
+    <Compile Include="Forms\AdvancedStats.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Blacklist.Designer.vb">
+      <DependentUpon>Blacklist.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Blacklist.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GetClipboard.Designer.vb">
+      <DependentUpon>GetClipboard.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GetClipboard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LockPC.Designer.vb">
+      <DependentUpon>LockPC.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LockPC.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MP3Player.Designer.vb">
+      <DependentUpon>MP3Player.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MP3Player.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OpenURL.Designer.vb">
+      <DependentUpon>OpenURL.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OpenURL.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OpenCloseCD.Designer.vb">
+      <DependentUpon>OpenCloseCD.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OpenCloseCD.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RemoteShell.Designer.vb">
+      <DependentUpon>RemoteShell.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RemoteShell.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\RemoteChat.Designer.vb">
@@ -103,6 +145,12 @@
       <DependentUpon>ScreenMonitor.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\ScreenMonitor.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TaskMgr.Designer.vb">
+      <DependentUpon>TaskMgr.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TaskMgr.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="RatPanel.Designer.vb">
@@ -132,19 +180,44 @@
     <Compile Include="ServerCheck.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Utils.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\AdvancedStats.resx">
+      <DependentUpon>AdvancedStats.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Blacklist.resx">
+      <DependentUpon>Blacklist.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GetClipboard.resx">
+      <DependentUpon>GetClipboard.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LockPC.resx">
+      <DependentUpon>LockPC.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MP3Player.resx">
+      <DependentUpon>MP3Player.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OpenCloseCD.resx">
+      <DependentUpon>OpenCloseCD.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OpenURL.resx">
+      <DependentUpon>OpenURL.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\RemoteChat.resx">
       <DependentUpon>RemoteChat.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RemoteDownload.resx">
       <DependentUpon>RemoteDownload.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\remoteshell.resx">
-      <DependentUpon>remoteshell.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\RemoteShell.resx">
+      <DependentUpon>RemoteShell.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ScreenMonitor.resx">
       <DependentUpon>ScreenMonitor.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TaskMgr.resx">
+      <DependentUpon>TaskMgr.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -172,6 +245,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\lock-min.jpg" />
     <None Include="Resources\toolstab.png" />
     <None Include="Resources\surveillancetab.png" />
     <None Include="Resources\shutdown.png" />

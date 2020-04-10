@@ -22,73 +22,74 @@ Partial Class RemoteDownload
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.components = New System.ComponentModel.Container()
+        Me.FilePathTB = New System.Windows.Forms.TextBox()
+        Me.BrowseBTN = New System.Windows.Forms.Button()
+        Me.ChangeFileNameCB = New System.Windows.Forms.CheckBox()
+        Me.UploadBTN = New System.Windows.Forms.Button()
+        Me.Upload_BTN_Availability_TM = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
-        'TextBox1
+        'FilePathTB
         '
-        Me.TextBox1.Enabled = False
-        Me.TextBox1.Location = New System.Drawing.Point(8, 6)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(269, 20)
-        Me.TextBox1.TabIndex = 1
+        Me.FilePathTB.Location = New System.Drawing.Point(8, 6)
+        Me.FilePathTB.Name = "FilePathTB"
+        Me.FilePathTB.Size = New System.Drawing.Size(448, 20)
+        Me.FilePathTB.TabIndex = 1
         '
-        'Button1
+        'BrowseBTN
         '
-        Me.Button1.Location = New System.Drawing.Point(283, 4)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Browse"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.BrowseBTN.Location = New System.Drawing.Point(462, 6)
+        Me.BrowseBTN.Name = "BrowseBTN"
+        Me.BrowseBTN.Size = New System.Drawing.Size(75, 23)
+        Me.BrowseBTN.TabIndex = 2
+        Me.BrowseBTN.Text = "Browse"
+        Me.BrowseBTN.UseVisualStyleBackColor = True
         '
-        'CheckBox1
+        'ChangeFileNameCB
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(89, 37)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(172, 17)
-        Me.CheckBox1.TabIndex = 3
-        Me.CheckBox1.Text = "Change File name at execution"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.ChangeFileNameCB.AutoSize = True
+        Me.ChangeFileNameCB.Location = New System.Drawing.Point(117, 37)
+        Me.ChangeFileNameCB.Name = "ChangeFileNameCB"
+        Me.ChangeFileNameCB.Size = New System.Drawing.Size(169, 17)
+        Me.ChangeFileNameCB.TabIndex = 3
+        Me.ChangeFileNameCB.Text = "Change file name at execution"
+        Me.ChangeFileNameCB.UseVisualStyleBackColor = True
         '
-        'Button2
+        'UploadBTN
         '
-        Me.Button2.Enabled = False
-        Me.Button2.Location = New System.Drawing.Point(8, 33)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 4
-        Me.Button2.Text = "Upload"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.UploadBTN.Enabled = False
+        Me.UploadBTN.Location = New System.Drawing.Point(8, 33)
+        Me.UploadBTN.Name = "UploadBTN"
+        Me.UploadBTN.Size = New System.Drawing.Size(103, 23)
+        Me.UploadBTN.TabIndex = 4
+        Me.UploadBTN.Text = "Upload"
+        Me.UploadBTN.UseVisualStyleBackColor = True
         '
-        'OpenFileDialog1
+        'Upload_BTN_Availability_TM
         '
-        Me.OpenFileDialog1.FileName = "OpenFileDialog1"
+        Me.Upload_BTN_Availability_TM.Enabled = True
         '
-        'remotedownload
+        'RemoteDownload
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(370, 62)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.CheckBox1)
-        Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.TextBox1)
-        Me.Name = "remotedownload"
+        Me.ClientSize = New System.Drawing.Size(549, 62)
+        Me.Controls.Add(Me.UploadBTN)
+        Me.Controls.Add(Me.ChangeFileNameCB)
+        Me.Controls.Add(Me.BrowseBTN)
+        Me.Controls.Add(Me.FilePathTB)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow
+        Me.Name = "RemoteDownload"
         Me.Text = "Remote Execute @ "
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents Button1 As Button
-    Friend WithEvents CheckBox1 As CheckBox
-    Friend WithEvents Button2 As Button
-    Friend WithEvents OpenFileDialog1 As OpenFileDialog
+    Friend WithEvents FilePathTB As TextBox
+    Friend WithEvents BrowseBTN As Button
+    Friend WithEvents ChangeFileNameCB As CheckBox
+    Friend WithEvents UploadBTN As Button
+    Friend WithEvents Upload_BTN_Availability_TM As Timer
 End Class

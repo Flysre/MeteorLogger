@@ -118,11 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="stub" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\stub;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Sans titre" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Sans titre.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="surveillancetab" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\surveillancetab.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="keyboard" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\keyboard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -130,40 +127,46 @@
   <data name="ratreboot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ratreboot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ratshutdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ratshutdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ratuninstall" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ratuninstall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="reboot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\reboot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="remote chat" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\remote chat.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="remote upload" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\remote upload.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="remoteshell" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\remoteshell.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Sans titre1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Sans titre1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="screen monitor" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\screen monitor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="screen monitor2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\screen monitor2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="toolstab" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\toolstab.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="shutdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\shutdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="surveillancetab" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\surveillancetab.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="screen monitor2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\screen monitor2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="toolstab" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\toolstab.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="reboot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\reboot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="screen monitor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\screen monitor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote chat" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\remote chat.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Sans titre1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Sans titre1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Sans titre" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Sans titre.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratuninstall" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ratuninstall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ratshutdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ratshutdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remoteshell" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\remoteshell.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stub" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\stub;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="remote upload" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\remote upload.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lock-min" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lock-min.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

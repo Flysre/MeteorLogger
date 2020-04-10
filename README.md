@@ -1,4 +1,5 @@
 <h1>MeteorLogger</h1>
+<img src="https://i.imgur.com/Eub9mmm.png" alt="Nihil icon" align=right width=140px />
 
 <h2>What ?</h2>
 MeteorLogger is a remote administration tool. Using the panel, you can configure a malware which you can then build.

