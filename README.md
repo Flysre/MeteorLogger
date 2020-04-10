@@ -1,4 +1,5 @@
 <h1>MeteorLogger</h1>
+<img src="https://i.imgur.com/Eub9mmm.png" alt="Nihil icon" align=right width=140px />
 
 <h2>What ?</h2>
 MeteorLogger is a remote administration tool. Using the panel, you can configure a malware which you can then build.
@@ -15,12 +16,15 @@ Actual :
 - Remote Uploader
 - Remote Execute
 - Messagebox
-- Remote mouse & keyboard control [DONE 02/04/2020]
+- Remote mouse control
+- Open URL
+- Open/close cd (using MCI)
+- Client blacklist
+- Lock victim's computer
 
 Incoming :
 - Keylogger
 - Remote Shell (with console response)
-- Open URL
 - Password stealer (Chrome, Firefox, Opera...)
 - Anti debugger/decompiler, antivm/sandbox
 - Artificial stub size supply (EOF random string injection)
@@ -30,6 +34,16 @@ Incoming :
 - Persistence
 - Auto-close process
 - Anti taskmgr/processhacker
+- Change Wallpaper
+- System logs
+- Advanced victim statistics
+- Hide taskbar
+- Invert mouse
+- Background mp3
+- Background voice (SAPI)
+- Smart file stealer
+- Geolocalisation
+- File browser
 
 <h2>Usage</h2>
 

