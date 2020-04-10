@@ -125,18 +125,6 @@ Namespace My
                 Me("stats_total_uptime") = value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
-        Public Property first_time_started() As Boolean
-            Get
-                Return CType(Me("first_time_started"),Boolean)
-            End Get
-            Set
-                Me("first_time_started") = value
-            End Set
-        End Property
     End Class
 End Namespace
 

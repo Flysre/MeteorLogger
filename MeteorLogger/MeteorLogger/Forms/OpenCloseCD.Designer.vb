@@ -74,6 +74,7 @@ Partial Class OpenCloseCD
         Me.Controls.Add(Me.repeatAmountNUD)
         Me.Controls.Add(Me.sendButton)
         Me.Controls.Add(Me.Label1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "OpenCloseCD"
         Me.Text = "Open Close CD @ "
         CType(Me.repeatAmountNUD, System.ComponentModel.ISupportInitialize).EndInit()

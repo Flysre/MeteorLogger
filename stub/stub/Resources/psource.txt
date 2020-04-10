@@ -4,11 +4,9 @@ Imports System.Windows.Forms
 Class Program
     Public Shared Sub Main()
         While True
-            Thread.Sleep(10000)
-
 			For Each PROCESS_ As System.Diagnostics.Process In System.Diagnostics.Process.GetProcesses
                 Try
-                    If PROCESS_.MainModule.FileName = "FULLFILEPATH_" Then Continue While
+                    If PROCESS_.MainModule.FileName = "FULLFILEPATH_" Then GoTo WHILE_END
                 Catch EXCEPTION_ As System.ComponentModel.Win32Exception
                 End Try
             Next
@@ -16,6 +14,7 @@ Class Program
             ' Execute stub
             MessageBox.Show("stub has to be executed!")
             System.Diagnostics.Process.Start("FULLFILEPATH_")
+WHILE_END:  Thread.Sleep(10000)
         End While
     End Sub
 End Class

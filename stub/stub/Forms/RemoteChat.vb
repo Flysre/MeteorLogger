@@ -111,7 +111,7 @@ Public Class RemoteChat
             Dim parsedMessage As String() = receivedMessageQuery.Split("|")
 
             If Not firstIter Then
-                ' TODO: Replace these ugly global variables by something smarter and safer
+                ' TODO: Replace these ugly global variables by something better
                 showInTB_param = parsedMessage(0) = "1"
                 topMost_param = parsedMessage(1) = "1"
 

@@ -23,9 +23,9 @@ Partial Class Blacklist
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.startupMsgCB = New System.Windows.Forms.CheckBox()
+        Me.startupMsgTB = New System.Windows.Forms.TextBox()
+        Me.blacklistBTN = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Label1
@@ -37,43 +37,44 @@ Partial Class Blacklist
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Blacklist user"
         '
-        'CheckBox1
+        'startupMsgCB
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(15, 25)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(168, 17)
-        Me.CheckBox1.TabIndex = 1
-        Me.CheckBox1.Text = "Message On Software Startup"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.startupMsgCB.AutoSize = True
+        Me.startupMsgCB.Location = New System.Drawing.Point(15, 25)
+        Me.startupMsgCB.Name = "startupMsgCB"
+        Me.startupMsgCB.Size = New System.Drawing.Size(168, 17)
+        Me.startupMsgCB.TabIndex = 1
+        Me.startupMsgCB.Text = "Message On Software Startup"
+        Me.startupMsgCB.UseVisualStyleBackColor = True
         '
-        'TextBox1
+        'startupMsgTB
         '
-        Me.TextBox1.Enabled = False
-        Me.TextBox1.Location = New System.Drawing.Point(15, 42)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(300, 51)
-        Me.TextBox1.TabIndex = 2
+        Me.startupMsgTB.Enabled = False
+        Me.startupMsgTB.Location = New System.Drawing.Point(15, 42)
+        Me.startupMsgTB.Multiline = True
+        Me.startupMsgTB.Name = "startupMsgTB"
+        Me.startupMsgTB.Size = New System.Drawing.Size(300, 51)
+        Me.startupMsgTB.TabIndex = 2
         '
-        'Button1
+        'blacklistBTN
         '
-        Me.Button1.Location = New System.Drawing.Point(15, 100)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(157, 23)
-        Me.Button1.TabIndex = 3
-        Me.Button1.Text = "Permanently Blacklist User"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.blacklistBTN.Location = New System.Drawing.Point(15, 100)
+        Me.blacklistBTN.Name = "blacklistBTN"
+        Me.blacklistBTN.Size = New System.Drawing.Size(157, 23)
+        Me.blacklistBTN.TabIndex = 3
+        Me.blacklistBTN.Text = "Permanently Blacklist User"
+        Me.blacklistBTN.UseVisualStyleBackColor = True
         '
         'Blacklist
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(327, 135)
-        Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.CheckBox1)
+        Me.Controls.Add(Me.blacklistBTN)
+        Me.Controls.Add(Me.startupMsgTB)
+        Me.Controls.Add(Me.startupMsgCB)
         Me.Controls.Add(Me.Label1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "Blacklist"
         Me.Text = "Victim Blacklist @ "
         Me.ResumeLayout(False)
@@ -82,7 +83,7 @@ Partial Class Blacklist
     End Sub
 
     Friend WithEvents Label1 As Label
-    Friend WithEvents CheckBox1 As CheckBox
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents Button1 As Button
+    Friend WithEvents startupMsgCB As CheckBox
+    Friend WithEvents startupMsgTB As TextBox
+    Friend WithEvents blacklistBTN As Button
 End Class

