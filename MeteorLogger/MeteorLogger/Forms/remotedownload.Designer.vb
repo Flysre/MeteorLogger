@@ -79,7 +79,7 @@ Partial Class RemoteDownload
         Me.Controls.Add(Me.ChangeFileNameCB)
         Me.Controls.Add(Me.BrowseBTN)
         Me.Controls.Add(Me.FilePathTB)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "RemoteDownload"
         Me.Text = "Remote Execute @ "
         Me.ResumeLayout(False)

@@ -22,20 +22,20 @@ Partial Class OpenURL
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.sendBTN = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.urlTB = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
-        'Button1
+        'sendBTN
         '
-        Me.Button1.Enabled = False
-        Me.Button1.Location = New System.Drawing.Point(118, 51)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(71, 23)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Send"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.sendBTN.Enabled = False
+        Me.sendBTN.Location = New System.Drawing.Point(118, 51)
+        Me.sendBTN.Name = "sendBTN"
+        Me.sendBTN.Size = New System.Drawing.Size(71, 23)
+        Me.sendBTN.TabIndex = 0
+        Me.sendBTN.Text = "Send"
+        Me.sendBTN.UseVisualStyleBackColor = True
         '
         'Label1
         '
@@ -46,21 +46,22 @@ Partial Class OpenURL
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "URL To Open"
         '
-        'TextBox1
+        'urlTB
         '
-        Me.TextBox1.Location = New System.Drawing.Point(15, 25)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(275, 20)
-        Me.TextBox1.TabIndex = 2
+        Me.urlTB.Location = New System.Drawing.Point(15, 25)
+        Me.urlTB.Name = "urlTB"
+        Me.urlTB.Size = New System.Drawing.Size(275, 20)
+        Me.urlTB.TabIndex = 2
         '
         'OpenURL
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(302, 76)
-        Me.Controls.Add(Me.TextBox1)
+        Me.ClientSize = New System.Drawing.Size(302, 84)
+        Me.Controls.Add(Me.urlTB)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.sendBTN)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.Name = "OpenURL"
         Me.Text = "Open URL @ "
         Me.ResumeLayout(False)
@@ -68,7 +69,7 @@ Partial Class OpenURL
 
     End Sub
 
-    Friend WithEvents Button1 As Button
+    Friend WithEvents sendBTN As Button
     Friend WithEvents Label1 As Label
-    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents urlTB As TextBox
 End Class

@@ -3,7 +3,7 @@ Imports System.IO
 Imports System.Net
 
 Public Class RemoteDownload
-    Public targetIp As String = ""
+    Public targetIp As String
 
     Private Sub RemoteDownload_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Text = "Remote Execute - " & targetIp
