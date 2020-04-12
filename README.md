@@ -1,3 +1,4 @@
+
 <h1>MeteorLogger</h1>
 <img src="https://i.imgur.com/Eub9mmm.png" alt="Nihil icon" align=right width=140px />
 
@@ -69,4 +70,7 @@ Disclaimer<br>
 - We decline responsability for any damage done with MeteorLogger.
 
 <h2>Developers and contact</h2>
-Incoming...
+
+| Developer | XPYTHACKER  | Jomtek  |
+| :-----: | :-: | :-: |
+| Discord | XPYTHACKER#2005 | Monsieur Puel#5446 |
