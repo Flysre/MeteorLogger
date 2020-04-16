@@ -13,6 +13,21 @@ Class ServerCheck
             Me.Opacity = 0 : Me.ShowInTaskbar = False
         End If
     End Sub
+
+    Public Sub DisplayServerError(ex As Exception)
+        Dim errMessage = MsgBox("Unable to connect to the FTP server." & vbCrLf &
+       "Details: " & ex.Message & vbCrLf &
+       "FTP: " & My.Settings.vpsurl & vbCrLf & vbCrLf &
+        "Do you want to modify it ?", MsgBoxStyle.YesNo)
+
+        If errMessage = MsgBoxResult.Yes Then
+            My.Settings.Reset()
+            isReinit = True
+        Else
+            End
+        End If
+    End Sub
+
     Private Sub LaunchCheckBTN_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LaunchCheckBTN.Click
         Dim pattern As String = "http(s)?://([\w+?\.\w+])+([a-zA-Z0-9\~\!\@\#\$\%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?"
 
