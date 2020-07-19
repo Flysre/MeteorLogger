@@ -73,4 +73,4 @@ Disclaimer<br>
 
 | Developer | XPYTHACKER  | Jomtek  |
 | :-----: | :-: | :-: |
-| Discord | xPyth#5693 | Monsieur Puel#5446 |
+| Discord | xPyth#5693 | Monsieur Puel#9827 |
